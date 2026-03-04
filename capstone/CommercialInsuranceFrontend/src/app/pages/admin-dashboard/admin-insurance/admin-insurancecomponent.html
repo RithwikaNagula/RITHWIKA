@@ -1,0 +1,236 @@
+<div class="space-y-12 py-10 transition-colors duration-300">
+  <!-- Professional Header -->
+  <div class="max-w-3xl px-4">
+    <span
+      class="text-[11px] font-bold text-taupe-500 dark:text-taupe-400 uppercase tracking-widest mb-4 block">Insurance
+      Management</span>
+    <h2 class="text-3xl font-extrabold text-taupe-700 dark:text-white tracking-tight mb-4">Categories & Plans</h2>
+    <p class="text-[15px] text-taupe-400 dark:text-taupe-500 font-medium leading-relaxed">Manage your insurance
+      categories and define
+      specific plans for your customers.</p>
+  </div>
+
+  <!-- Insurance Types Section -->
+  <section
+    class="bg-white dark:bg-[#1C1517] rounded-3xl border border-taupe-50 dark:border-[#2E2122] shadow-sm overflow-hidden transition-all duration-300">
+    <div
+      class="px-8 py-6 border-b border-taupe-50 dark:border-taupe-900/50 bg-taupe-50/20 dark:bg-taupe-900/10 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 bg-taupe-600 dark:bg-taupe-700 rounded-xl flex items-center justify-center text-white shadow-md border border-taupe-100 dark:border-taupe-800">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+            stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 00-1.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+        </div>
+        <h3 class="text-[11px] font-bold text-taupe-700 dark:text-white uppercase tracking-widest leading-none">
+          Insurance Categories
+        </h3>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div
+        class="mb-10 bg-taupe-50/50 dark:bg-taupe-900/20 p-8 rounded-3xl border border-taupe-100 dark:border-taupe-800">
+        <span
+          class="text-[10px] font-bold text-taupe-400 dark:text-taupe-500 uppercase tracking-widest mb-6 block leading-none text-center">Add
+          New Category</span>
+        <form (ngSubmit)="createType()" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+          <div class="md:col-span-1">
+            <label class="input-label">Category Name</label>
+            <input type="text" [(ngModel)]="newType.typeName" name="typeName" required class="input-field"
+              placeholder="e.g. Life Insurance" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="input-label">Description</label>
+            <input type="text" [(ngModel)]="newType.description" name="typeDesc" class="input-field"
+              placeholder="Brief summary of category..." />
+          </div>
+          <div class="md:col-span-1">
+            <button type="submit" [disabled]="!newType.typeName"
+              class="btn-primary w-full py-4 text-xs shadow-lg shadow-taupe-600/10">
+              Save Category
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="overflow-hidden rounded-2xl border border-taupe-100 dark:border-[#2E2122]">
+        <table class="min-w-full divide-y divide-taupe-100 dark:divide-taupe-900/50">
+          <thead>
+            <tr
+              class="bg-taupe-50/50 dark:bg-taupe-900/20 text-taupe-400 dark:text-taupe-500 text-[10px] font-bold uppercase tracking-widest">
+              <th class="px-6 py-4 text-left">Category ID</th>
+              <th class="px-6 py-4 text-left">Category Name</th>
+              <th class="px-6 py-4 text-left">Description</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-[#1C1517] divide-y divide-taupe-50 dark:divide-taupe-900/50">
+            <tr *ngFor="let t of types()"
+              class="hover:bg-taupe-50/30 dark:hover:bg-taupe-900/20 transition-colors group">
+              <td class="px-6 py-5 text-[10px] font-bold text-taupe-400 dark:text-taupe-600 font-mono">#{{
+                t.id.substring(0,6).toUpperCase()
+                }}</td>
+              <td class="px-6 py-5 text-sm font-bold text-taupe-800 dark:text-white uppercase tracking-tight">{{
+                t.typeName }}</td>
+              <td class="px-6 py-5 text-[11px] font-medium text-taupe-500 dark:text-taupe-400 max-w-xs truncate">{{
+                t.description }}</td>
+              <td class="px-6 py-5 text-right">
+                <button (click)="deleteType(t.id, t.typeName)"
+                  class="text-taupe-300 dark:text-taupe-700 hover:text-red-500 dark:hover:text-red-400 transition-colors p-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor" class="w-4 h-4 ml-auto">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="types().length === 0">
+              <td colspan="4"
+                class="px-6 py-12 text-center text-[10px] font-bold text-taupe-300 dark:text-taupe-700 uppercase tracking-widest italic font-mono">
+                No Categories Found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plans Section -->
+  <section
+    class="bg-white dark:bg-[#1C1517] rounded-3xl border border-taupe-100 dark:border-[#2E2122] shadow-sm overflow-hidden transition-all duration-300">
+    <div
+      class="px-8 py-6 border-b border-taupe-50 dark:border-taupe-900/50 bg-taupe-50/20 dark:bg-taupe-900/10 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 bg-white dark:bg-taupe-800 rounded-xl flex items-center justify-center text-taupe-600 dark:text-white shadow-sm border border-taupe-100 dark:border-taupe-700">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+            stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25V20" />
+          </svg>
+        </div>
+        <h3 class="text-[11px] font-bold text-[#0f172a] dark:text-white uppercase tracking-widest leading-none">
+          Insurance Plans</h3>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div
+        class="mb-10 bg-taupe-50/50 dark:bg-taupe-900/20 p-8 rounded-3xl border border-taupe-100 dark:border-taupe-800">
+        <span
+          class="text-[10px] font-bold text-taupe-400 dark:text-taupe-500 uppercase tracking-widest mb-10 block leading-none text-center">Create
+          New Insurance Plan</span>
+        <form (ngSubmit)="createPlan()" class="space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-1">
+              <label class="input-label">Insurance Category</label>
+              <select [(ngModel)]="newPlan.insuranceTypeId" name="insuranceTypeId" required
+                class="input-field appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22currentColor%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%22%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22M19%209l-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1rem_1rem] bg-[right_1rem_center] bg-no-repeat">
+                <option [ngValue]="null" disabled selected>Select Category</option>
+                <option *ngFor="let t of types()" [value]="t.id">{{ t.typeName }}</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="input-label">Plan Name</label>
+              <input type="text" [(ngModel)]="newPlan.planName" name="planName" required class="input-field"
+                placeholder="e.g. Enterprise Protection Plus" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div>
+              <label class="input-label">Min Coverage (₹)</label>
+              <input type="number" [(ngModel)]="newPlan.minCoverageAmount" name="minCoverageAmount" required
+                class="input-field" placeholder="0" />
+            </div>
+            <div>
+              <label class="input-label">Max Coverage (₹)</label>
+              <input type="number" [(ngModel)]="newPlan.maxCoverageAmount" name="maxCoverageAmount" required
+                class="input-field" placeholder="0" />
+            </div>
+            <div>
+              <label class="input-label">Base Premium (₹)</label>
+              <input type="number" [(ngModel)]="newPlan.basePremium" name="basePremium" required class="input-field"
+                placeholder="0" />
+            </div>
+            <div>
+              <label class="input-label">Duration (Months)</label>
+              <input type="number" [(ngModel)]="newPlan.durationInMonths" name="durationInMonths" required
+                class="input-field" placeholder="12" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+            <div class="md:col-span-3">
+              <label class="input-label">Plan Description & Benefits</label>
+              <input type="text" [(ngModel)]="newPlan.description" name="planDesc" class="input-field"
+                placeholder="Briefly describe the plan features..." />
+            </div>
+            <div class="md:col-span-1">
+              <button type="submit" [disabled]="!newPlan.planName || !newPlan.insuranceTypeId"
+                class="btn-primary w-full py-4 text-xs shadow-lg shadow-taupe-600/10">
+                Create Plan
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="overflow-hidden rounded-2xl border border-taupe-100 dark:border-[#2E2122]">
+        <table class="min-w-full divide-y divide-taupe-100 dark:divide-taupe-900/50">
+          <thead>
+            <tr
+              class="bg-taupe-50/50 dark:bg-taupe-900/20 text-taupe-400 dark:text-taupe-500 text-[10px] font-bold uppercase tracking-widest">
+              <th class="px-6 py-4 text-left">Plan Name</th>
+              <th class="px-6 py-4 text-left">Category</th>
+              <th class="px-6 py-4 text-left">Coverage Range</th>
+              <th class="px-6 py-4 text-left">Premium</th>
+              <th class="px-6 py-4 text-left">Duration</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-[#1C1517] divide-y divide-taupe-50 dark:divide-taupe-900/50">
+            <tr *ngFor="let p of plans()"
+              class="hover:bg-taupe-50/30 dark:hover:bg-taupe-900/20 transition-colors group">
+              <td class="px-6 py-5 text-sm font-bold text-taupe-800 dark:text-white uppercase tracking-tight">{{
+                p.planName }}</td>
+              <td class="px-6 py-5">
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded-lg text-[8px] font-bold uppercase tracking-widest bg-taupe-50 dark:bg-taupe-900/30 border border-taupe-100 dark:border-taupe-800 text-taupe-600 dark:text-taupe-400">
+                  {{ p.insuranceTypeName || 'General' }}
+                </span>
+              </td>
+              <td class="px-6 py-5 text-[10px] font-bold text-taupe-500 dark:text-taupe-400 font-mono">₹{{
+                (p.minCoverageAmount | number)
+                || '0' }} - ₹{{ (p.maxCoverageAmount | number) || '0' }}</td>
+              <td class="px-6 py-5 text-[11px] font-bold text-taupe-900 dark:text-white italic">₹{{ p.basePremium |
+                number }}</td>
+              <td class="px-6 py-5 text-[10px] font-bold text-taupe-400 dark:text-taupe-500 uppercase tracking-widest">
+                {{ p.durationInMonths
+                }} Mo</td>
+              <td class="px-6 py-5 text-right">
+                <button (click)="deletePlan(p.id, p.planName)"
+                  class="text-taupe-300 dark:text-taupe-700 hover:text-red-500 dark:hover:text-red-400 transition-colors p-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor" class="w-4 h-4 ml-auto">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="plans().length === 0">
+              <td colspan="6"
+                class="px-6 py-12 text-center text-[10px] font-bold text-taupe-300 dark:text-taupe-700 uppercase tracking-widest italic font-mono">
+                No Plans Found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>

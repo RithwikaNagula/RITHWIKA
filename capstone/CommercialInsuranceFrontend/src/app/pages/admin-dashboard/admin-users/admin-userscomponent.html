@@ -1,0 +1,184 @@
+<div class="space-y-12 py-10 transition-colors duration-300">
+  <!-- Professional Header -->
+  <div class="max-w-3xl">
+    <span class="text-xs font-bold text-taupe-600 dark:text-taupe-400 uppercase tracking-widest mb-4 block">IAM
+      Control</span>
+    <h2 class="text-3xl font-black text-taupe-900 dark:text-white tracking-tight uppercase leading-none mb-4">Access
+      Management</h2>
+    <p class="text-taupe-500 dark:text-taupe-400 font-medium leading-relaxed">Provision and manage Agent and Claims
+      Officer accounts
+      securely with elevated system privileges.</p>
+    <div
+      class="mt-8 inline-flex items-center px-4 py-2 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-900/30 text-[10px] font-black uppercase tracking-widest italic">
+      <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+          d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+      </svg>
+      Restricted Zone: Administrator credentials required for deployment.
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <!-- Create Agent -->
+    <section
+      class="bg-white dark:bg-[#1C1517] border-white dark:border-[#2E2122] rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm overflow-hidden transition-all duration-300">
+      <div class="px-8 py-6 border-b border-taupe-50 dark:border-taupe-900/50 bg-taupe-50/30 dark:bg-taupe-900/10">
+        <h3 class="text-sm font-black text-taupe-900 dark:text-white uppercase tracking-widest flex items-center">
+          Deploy New Agent
+        </h3>
+      </div>
+      <div class="p-8">
+        <form (ngSubmit)="createAgent()" class="space-y-6">
+          <div>
+            <label class="input-label">Operational Name</label>
+            <input type="text" [(ngModel)]="newAgent.fullName" name="agentName" required class="input-field shadow-none"
+              placeholder="e.g. John Doe" />
+          </div>
+          <div>
+            <label class="input-label">Enterprise Email</label>
+            <input type="email" [(ngModel)]="newAgent.email" name="agentEmail" required class="input-field shadow-none"
+              placeholder="john.agent@insure.com" />
+          </div>
+          <div>
+            <label class="input-label">Secure Access Key</label>
+            <input type="password" [(ngModel)]="newAgent.password" name="agentPass" required
+              class="input-field shadow-none" placeholder="Min 6 alphanumeric characters" minlength="6" />
+          </div>
+          <button type="submit" [disabled]="!newAgent.fullName || !newAgent.email || !newAgent.password"
+            class="w-full btn-primary !rounded-xl !py-4 shadow-lg shadow-taupe-600/10 uppercase tracking-widest !text-[10px]">Initialize
+            Agent Suite</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Create Claims Officer -->
+    <section
+      class="bg-white dark:bg-[#1C1517] border-white dark:border-[#2E2122] rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm overflow-hidden transition-all duration-300">
+      <div class="px-8 py-6 border-b border-taupe-50 dark:border-taupe-900/50 bg-taupe-50/30 dark:bg-taupe-900/10">
+        <h3 class="text-sm font-black text-taupe-900 dark:text-white uppercase tracking-widest flex items-center">
+          Deploy Claims Specialist
+        </h3>
+      </div>
+      <div class="p-8">
+        <form (ngSubmit)="createOfficer()" class="space-y-6">
+          <div>
+            <label class="input-label">Specialist Name</label>
+            <input type="text" [(ngModel)]="newOfficer.fullName" name="officerName" required
+              class="input-field shadow-none" placeholder="e.g. Jane Smith" />
+          </div>
+          <div>
+            <label class="input-label">Audit Email</label>
+            <input type="email" [(ngModel)]="newOfficer.email" name="officerEmail" required
+              class="input-field shadow-none" placeholder="jane.claims@insure.com" />
+          </div>
+          <div>
+            <label class="input-label">Secure Access Key</label>
+            <input type="password" [(ngModel)]="newOfficer.password" name="officerPass" required
+              class="input-field shadow-none" placeholder="Min 6 alphanumeric characters" minlength="6" />
+          </div>
+          <button type="submit" [disabled]="!newOfficer.fullName || !newOfficer.email || !newOfficer.password"
+            class="w-full btn-primary !rounded-xl !py-4 shadow-lg shadow-taupe-600/10 uppercase tracking-widest !text-[10px]">Initialize
+            Specialist Suite</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- Users List -->
+  <section
+    class="bg-white dark:bg-[#1C1517] border-white dark:border-[#2E2122] rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm overflow-hidden mt-8 transition-all duration-300">
+    <div
+      class="px-8 py-6 border-b border-taupe-50 dark:border-taupe-900/50 bg-taupe-50/30 dark:bg-taupe-900/10 flex justify-between items-center">
+      <h3 class="text-sm font-black text-taupe-900 dark:text-white uppercase tracking-widest">Active Personnel Directory
+      </h3>
+      <div class="flex gap-2">
+        <button (click)="currentTab = 'Agents'" [class.bg-taupe-600]="currentTab === 'Agents'"
+          [class.!text-white]="currentTab === 'Agents'"
+          class="px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-taupe-400 dark:text-taupe-500 border border-transparent transition-all">Agents</button>
+        <button (click)="currentTab = 'Officers'" [class.bg-taupe-600]="currentTab === 'Officers'"
+          [class.!text-white]="currentTab === 'Officers'"
+          class="px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-taupe-400 dark:text-taupe-500 border border-transparent transition-all">Officers</button>
+      </div>
+    </div>
+
+    <div class="p-0 overflow-x-auto">
+      <table class="min-w-full divide-y divide-taupe-50 dark:divide-taupe-900/50">
+        <thead>
+          <tr
+            class="bg-taupe-50/50 dark:bg-taupe-900/20 text-taupe-400 dark:text-taupe-500 text-[9px] font-black uppercase tracking-[0.2em]">
+            <th class="px-8 py-5 text-left">Internal Name</th>
+            <th class="px-8 py-5 text-left">Network ID</th>
+            <th class="px-8 py-5 text-left">Unit Role</th>
+            <th class="px-8 py-5 text-left">Deployment Date</th>
+            <th class="px-8 py-5 text-right">System Control</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-[#1C1517] divide-y divide-taupe-50 dark:divide-taupe-900/50">
+          <ng-container *ngIf="currentTab === 'Agents'">
+            <tr *ngFor="let a of agents()"
+              class="hover:bg-taupe-50/30 dark:hover:bg-taupe-900/20 transition-colors group">
+              <td class="px-8 py-6 text-xs font-black text-taupe-800 dark:text-taupe-200 uppercase tracking-tight">{{
+                a.fullName }}</td>
+              <td class="px-8 py-6 text-[11px] font-medium text-taupe-500 dark:text-taupe-400 font-mono italic">{{
+                a.email }}</td>
+              <td class="px-8 py-6">
+                <span
+                  class="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-taupe-50 dark:bg-taupe-900/30 text-taupe-600 dark:text-taupe-400 border border-taupe-100 dark:border-taupe-800">{{
+                  a.role }}</span>
+              </td>
+              <td class="px-8 py-6 text-[10px] font-bold text-taupe-400 dark:text-taupe-500">{{ a.createdAt |
+                date:'mediumDate' }}</td>
+              <td class="px-8 py-6 text-right">
+                <button (click)="deleteUser(a.id, a.fullName)"
+                  class="text-taupe-300 dark:text-taupe-700 hover:text-red-500 dark:hover:text-red-400 transition-colors p-2 md:opacity-0 group-hover:opacity-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-auto" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="agents().length === 0">
+              <td colspan="5"
+                class="px-8 py-16 text-center text-[10px] font-bold text-taupe-300 dark:text-taupe-700 uppercase tracking-widest italic font-mono">
+                Module Directory Null</td>
+            </tr>
+          </ng-container>
+
+          <ng-container *ngIf="currentTab === 'Officers'">
+            <tr *ngFor="let o of officers()"
+              class="hover:bg-taupe-50/30 dark:hover:bg-taupe-900/20 transition-colors group">
+              <td class="px-8 py-6 text-xs font-black text-taupe-800 dark:text-taupe-200 uppercase tracking-tight">{{
+                o.fullName }}</td>
+              <td class="px-8 py-6 text-[11px] font-medium text-taupe-500 dark:text-taupe-400 font-mono italic">{{
+                o.email }}</td>
+              <td class="px-8 py-6">
+                <span
+                  class="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-taupe-50 dark:bg-taupe-900/30 text-taupe-600 dark:text-taupe-400 border border-taupe-100 dark:border-taupe-800">{{
+                  o.role }}</span>
+              </td>
+              <td class="px-8 py-6 text-[10px] font-bold text-taupe-400 dark:text-taupe-500">{{ o.createdAt |
+                date:'mediumDate' }}</td>
+              <td class="px-8 py-6 text-right">
+                <button (click)="deleteUser(o.id, o.fullName)"
+                  class="text-taupe-300 dark:text-taupe-700 hover:text-red-500 dark:hover:text-red-400 transition-colors p-2 md:opacity-0 group-hover:opacity-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-auto" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="officers().length === 0">
+              <td colspan="5"
+                class="px-8 py-16 text-center text-[10px] font-bold text-taupe-300 dark:text-taupe-700 uppercase tracking-widest italic font-mono">
+                Specialist Directory Null</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

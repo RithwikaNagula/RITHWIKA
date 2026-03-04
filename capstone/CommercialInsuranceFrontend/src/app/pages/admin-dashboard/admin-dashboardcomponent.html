@@ -1,0 +1,76 @@
+<div class="min-h-screen bg-taupe-50/20 dark:bg-[#140E0F] flex flex-col md:flex-row h-screen overflow-hidden">
+  <!-- Clean Sidebar -->
+  <aside
+    class="w-full md:w-80 bg-white dark:bg-[#1C1517] border-r border-taupe-100 dark:border-[#2E2122] flex-shrink-0 flex flex-col shadow-sm z-20 h-full overflow-y-auto transition-colors duration-300">
+    <div class="p-10 border-b border-taupe-50 dark:border-taupe-900/50">
+      <span
+        class="text-[11px] font-bold text-taupe-600 dark:text-taupe-400 uppercase tracking-widest mb-4 block">Strategic
+        Control</span>
+      <h2 class="text-2xl font-extrabold text-taupe-900 dark:text-white tracking-tight">Admin <span
+          class="text-taupe-400 dark:text-taupe-500">Command</span></h2>
+    </div>
+
+    <nav class="p-8 space-y-2 flex-1">
+      <a routerLink="/admin/analytics"
+        routerLinkActive="!bg-taupe-50/50 dark:!bg-taupe-900/40 !text-taupe-900 dark:!text-white !border-taupe-100 dark:!border-taupe-800 shadow-sm"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl text-taupe-400 dark:text-taupe-500 hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50/50 dark:hover:bg-taupe-900/30 border border-transparent transition-all duration-300 group">
+        <div
+          class="w-1.5 h-1.5 rounded-full bg-taupe-200 dark:bg-taupe-800 group-hover:bg-taupe-900 dark:group-hover:bg-taupe-400 transition-colors">
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-widest">Live Analytics</span>
+      </a>
+
+      <a routerLink="/admin/insurance"
+        routerLinkActive="!bg-taupe-50/50 dark:!bg-taupe-900/40 !text-taupe-900 dark:!text-white !border-taupe-100 dark:!border-taupe-800 shadow-sm"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl text-taupe-400 dark:text-taupe-500 hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50/50 dark:hover:bg-taupe-900/30 border border-transparent transition-all duration-300 group">
+        <div
+          class="w-1.5 h-1.5 rounded-full bg-taupe-200 dark:bg-taupe-800 group-hover:bg-taupe-900 dark:group-hover:bg-taupe-400 transition-colors">
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-widest">Risk Portfolios</span>
+      </a>
+
+      <a routerLink="/admin/policies"
+        routerLinkActive="!bg-taupe-50/50 dark:!bg-taupe-900/40 !text-taupe-900 dark:!text-white !border-taupe-100 dark:!border-taupe-800 shadow-sm"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl text-taupe-400 dark:text-taupe-500 hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50/50 dark:hover:bg-taupe-900/30 border border-transparent transition-all duration-300 group">
+        <div
+          class="w-1.5 h-1.5 rounded-full bg-taupe-200 dark:bg-taupe-800 group-hover:bg-taupe-900 dark:group-hover:bg-taupe-400 transition-colors">
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-widest">Asset Policies</span>
+      </a>
+
+      <a routerLink="/admin/users"
+        routerLinkActive="!bg-taupe-50/50 dark:!bg-taupe-900/40 !text-taupe-900 dark:!text-white !border-taupe-100 dark:!border-taupe-800 shadow-sm"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl text-taupe-400 dark:text-taupe-500 hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50/50 dark:hover:bg-taupe-900/30 border border-transparent transition-all duration-300 group">
+        <div
+          class="w-1.5 h-1.5 rounded-full bg-taupe-200 dark:bg-taupe-800 group-hover:bg-taupe-900 dark:group-hover:bg-taupe-400 transition-colors">
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-widest">Access Control</span>
+      </a>
+
+      <a routerLink="/admin/inquiries"
+        routerLinkActive="!bg-taupe-50/50 dark:!bg-taupe-900/40 !text-taupe-900 dark:!text-white !border-taupe-100 dark:!border-taupe-800 shadow-sm"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl text-taupe-400 dark:text-taupe-500 hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50/50 dark:hover:bg-taupe-900/30 border border-transparent transition-all duration-300 group">
+        <div
+          class="w-1.5 h-1.5 rounded-full bg-taupe-200 dark:bg-taupe-800 group-hover:bg-taupe-900 dark:group-hover:bg-taupe-400 transition-colors">
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-widest">Support Feed</span>
+      </a>
+    </nav>
+
+    <div class="p-8 mt-auto border-t border-taupe-50 dark:border-taupe-900/50">
+      <p
+        class="text-[9px] font-bold text-taupe-400 dark:text-taupe-500 uppercase tracking-[0.3em] flex items-center gap-3">
+        <span
+          class="w-1.5 h-1.5 rounded-full bg-taupe-500 dark:bg-taupe-600 shadow-[0_0_10px_rgba(144,126,128,0.3)]"></span>
+        Core Active
+      </p>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-10 md:p-16 overflow-y-auto bg-taupe-50/20 dark:bg-[#140E0F] transition-colors duration-300">
+    <div class="max-w-7xl mx-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

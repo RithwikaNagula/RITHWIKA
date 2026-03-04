@@ -1,0 +1,102 @@
+<div class="space-y-12 py-10 transition-colors duration-300">
+  <!-- Professional Header -->
+  <div class="max-w-3xl">
+    <span class="text-xs font-bold text-taupe-600 dark:text-taupe-400 uppercase tracking-widest mb-4 block">Asset
+      Oversight</span>
+    <h2 class="text-3xl font-black text-taupe-900 dark:text-white tracking-tight uppercase leading-none mb-4">Portfolio
+      Directory</h2>
+    <p class="text-taupe-500 dark:text-taupe-400 font-medium leading-relaxed">Comprehensive audit trail of all generated
+      policies and
+      submitted claims across the enterprise ecosystem.</p>
+  </div>
+
+  <section
+    class="bg-white dark:bg-[#1C1517] border-white dark:border-[#2E2122] rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm overflow-hidden mt-8 transition-all duration-300">
+    <div
+      class="px-8 py-6 border-b border-taupe-50 dark:border-taupe-900/50 bg-taupe-50/30 dark:bg-taupe-900/10 flex justify-between items-center">
+      <h3 class="text-sm font-black text-taupe-900 dark:text-white uppercase tracking-widest italic">Ledger Registry
+      </h3>
+      <div class="flex gap-2">
+        <button (click)="currentTab = 'Policies'" [class.bg-taupe-600]="currentTab === 'Policies'"
+          [class.!text-white]="currentTab === 'Policies'"
+          class="px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-taupe-400 dark:text-taupe-500 border border-transparent transition-all">Policies</button>
+        <button (click)="currentTab = 'Claims'" [class.bg-taupe-600]="currentTab === 'Claims'"
+          [class.!text-white]="currentTab === 'Claims'"
+          class="px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-taupe-400 dark:text-taupe-500 border border-transparent transition-all">Claims</button>
+      </div>
+    </div>
+
+    <div class="p-0 overflow-x-auto">
+      <table class="min-w-full divide-y divide-taupe-50 dark:divide-taupe-900/50">
+        <thead>
+          <tr
+            class="bg-taupe-50/50 dark:bg-taupe-900/20 text-taupe-400 dark:text-taupe-500 text-[9px] font-black uppercase tracking-[0.2em]">
+            <th class="px-8 py-5 text-left">Internal ID</th>
+            <th class="px-8 py-5 text-left">SKU / Vertical</th>
+            <th class="px-8 py-5 text-left">Exposure</th>
+            <th class="px-8 py-5 text-left">Status</th>
+            <th *ngIf="currentTab === 'Policies'" class="px-8 py-5 text-right">System Control</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-[#1C1517] divide-y divide-taupe-50 dark:divide-taupe-900/50">
+          <ng-container *ngIf="currentTab === 'Policies'">
+            <tr *ngFor="let p of policies()"
+              class="hover:bg-taupe-50/30 dark:hover:bg-taupe-900/20 transition-colors group">
+              <td class="px-8 py-6 text-[10px] font-bold text-taupe-400 dark:text-taupe-600 font-mono">{{ p.policyNumber
+                || 'Draft' }}</td>
+              <td class="px-8 py-6 text-xs font-black text-taupe-800 dark:text-white uppercase tracking-tight">{{
+                p.planName }}</td>
+              <td class="px-8 py-6 text-[11px] font-black text-taupe-900 dark:text-taupe-200 italic">₹{{ p.premiumAmount
+                | number:'1.2-2' }}
+              </td>
+              <td class="px-8 py-6">
+                <span
+                  class="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-taupe-50 dark:bg-taupe-900/30 text-taupe-600 dark:text-taupe-400 border border-taupe-100 dark:border-taupe-800">{{
+                  p.status }}</span>
+              </td>
+              <td class="px-8 py-6 text-right">
+                <button (click)="deletePolicy(p.id, p.policyNumber)"
+                  class="text-taupe-300 dark:text-taupe-700 hover:text-red-500 dark:hover:text-red-400 transition-colors p-2 md:opacity-0 group-hover:opacity-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-auto" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="policies().length === 0">
+              <td colspan="5"
+                class="px-8 py-16 text-center text-[10px] font-bold text-taupe-300 dark:text-taupe-700 uppercase tracking-widest italic font-mono">
+                Portfolio Ledger Null</td>
+            </tr>
+          </ng-container>
+
+          <ng-container *ngIf="currentTab === 'Claims'">
+            <tr *ngFor="let c of claims()"
+              class="hover:bg-taupe-50/30 dark:hover:bg-taupe-900/20 transition-colors group">
+              <td class="px-8 py-6 text-[10px] font-bold text-taupe-400 dark:text-taupe-600 font-mono">{{ c.claimNumber
+                }}</td>
+              <td class="px-8 py-6 text-xs font-black text-taupe-800 dark:text-white uppercase tracking-tight">POL: {{
+                c.policyNumber }}
+              </td>
+              <td class="px-8 py-6 text-[11px] font-black text-taupe-900 dark:text-taupe-200 italic">₹{{ c.claimAmount |
+                number:'1.2-2' }}
+              </td>
+              <td class="px-8 py-6">
+                <span
+                  class="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-taupe-50 dark:bg-taupe-900/30 text-taupe-600 dark:text-taupe-400 border border-taupe-100 dark:border-taupe-800">{{
+                  c.status }}</span>
+              </td>
+            </tr>
+            <tr *ngIf="claims().length === 0">
+              <td colspan="4"
+                class="px-8 py-16 text-center text-[10px] font-bold text-taupe-300 dark:text-taupe-700 uppercase tracking-widest italic font-mono">
+                Claim Records Null</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

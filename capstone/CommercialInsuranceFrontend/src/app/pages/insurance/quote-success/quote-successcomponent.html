@@ -1,0 +1,108 @@
+<div class="min-h-screen bg-taupe-50 dark:bg-[#1A1314] py-16 px-4 flex items-center justify-center relative overflow-hidden">
+  <!-- Decorative Elements -->
+  <div class="absolute top-0 right-0 w-[40%] h-[40%] bg-emerald-100/20 rounded-full blur-[120px] pointer-events-none">
+  </div>
+  <div class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-taupe-50/30 dark:bg-[#1A1314]/30 rounded-full blur-[120px] pointer-events-none">
+  </div>
+
+  <div
+    class="max-w-md w-full bg-white dark:bg-[#1A1314] rounded-[2.5rem] border border-white dark:border-taupe-800 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.03)] overflow-hidden relative z-10">
+    <!-- Sophisticated Header -->
+    <div class="bg-emerald-600 p-10 text-center relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 dark:bg-[#1A1314]/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <div
+        class="w-16 h-16 bg-white/20 dark:bg-[#1A1314]/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-md border border-white/30 dark:border-taupe-800/30">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4" stroke="white"
+          class="w-8 h-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+      </div>
+      <h1 class="text-2xl font-black text-white tracking-tighter uppercase leading-none">Quote <span
+          class="opacity-60">Generated</span></h1>
+      <p class="text-emerald-50/80 mt-2 font-black uppercase tracking-widest text-[9px] italic">Reference Secured</p>
+    </div>
+
+    <div *ngIf="policy()" class="p-8 space-y-6">
+      <div class="text-center bg-taupe-50 dark:bg-[#1A1314] rounded-2xl p-6 border border-taupe-100/50 dark:border-taupe-800/50 shadow-inner">
+        <p class="text-[9px] font-black text-taupe-400 uppercase tracking-[0.2em] mb-2 italic">Policy Registry Code</p>
+        <p class="text-xl font-black text-taupe-900 dark:text-white tracking-tighter font-mono">{{ policy()?.policyNumber }}</p>
+      </div>
+
+      <!-- Verified Status Cards -->
+      <div class="space-y-3">
+        <!-- Pending Review -->
+        <div *ngIf="policy()?.status === 'PendingReview'"
+          class="p-4 bg-amber-50 rounded-2xl border border-amber-100/50 flex items-center gap-4">
+          <div
+            class="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-amber-200">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              stroke="currentColor" class="w-5 h-5 animate-pulse">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-black text-amber-700 uppercase text-[9px] tracking-widest leading-none mb-1">Audit in
+              Progress</p>
+            <p class="text-[10px] text-taupe-500 font-bold leading-tight">Agent {{ policy()?.agentName }} is verifying
+              credentials.</p>
+          </div>
+        </div>
+
+        <!-- Approved -->
+        <div *ngIf="policy()?.status === 'Approved' || policy()?.status === 'Pending'"
+          class="p-4 bg-taupe-50 dark:bg-[#1A1314] rounded-2xl border border-taupe-100/50 dark:border-taupe-800/50 flex items-center gap-4">
+          <div
+            class="w-10 h-10 bg-taupe-600 text-white rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-taupe-200">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-black text-taupe-700 dark:text-taupe-300 uppercase text-[9px] tracking-widest leading-none mb-1">Awaiting
+              Remittance</p>
+            <p class="text-[10px] text-taupe-500 font-bold leading-tight">Verification complete. Initiate activation
+              protocol.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-4 bg-taupe-50/50 dark:bg-[#1A1314]/50 rounded-2xl border border-taupe-100 dark:border-taupe-800 transition-all hover:bg-white">
+            <p class="text-[8px] font-black text-taupe-400 uppercase tracking-widest mb-1 italic leading-none">{{
+              policy()?.paymentFrequency }} Rate</p>
+            <p class="font-black text-taupe-900 dark:text-white text-lg tracking-tighter">₹{{ policy()?.premiumAmount | number }}<span
+                class="text-[9px] text-taupe-400 ml-1 font-bold">/period</span></p>
+          </div>
+          <div class="p-4 bg-taupe-50/50 dark:bg-[#1A1314]/50 rounded-2xl border border-taupe-100 dark:border-taupe-800 transition-all hover:bg-white">
+            <p class="text-[8px] font-black text-taupe-400 uppercase tracking-widest mb-1 italic leading-none">System
+              Status</p>
+            <p class="font-black text-taupe-600 dark:text-taupe-400 text-[10px] uppercase tracking-widest truncate leading-none">{{
+              policy()?.status }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex flex-col gap-3">
+        <a *ngIf="policy()?.status === 'Approved' || policy()?.status === 'Pending'"
+          [routerLink]="['/policies', policy()?.id, 'pay']"
+          class="w-full bg-taupe-900 hover:bg-taupe-800 text-white rounded-xl py-4 px-6 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-taupe-900/10 text-center transition-all active:scale-95">
+          Initiate Payment
+        </a>
+        <a *ngIf="policy()?.status === 'Active'" [routerLink]="['/policies', policy()?.id, 'invoice']"
+          class="w-full bg-taupe-900 hover:bg-taupe-800 text-white rounded-xl py-4 px-6 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-taupe-900/10 text-center transition-all active:scale-95">
+          View Receipt
+        </a>
+        <a routerLink="/dashboard"
+          class="text-center text-taupe-400 font-black hover:text-taupe-900 transition-all uppercase text-[9px] tracking-[0.3em] py-2 mt-2">
+          Return to Portfolio
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="!policy()" class="p-20 text-center">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-taupe-100 dark:border-taupe-800 border-t-taupe-600"></div>
+    </div>
+  </div>
+</div>
+
