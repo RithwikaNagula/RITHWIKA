@@ -1,3 +1,4 @@
+﻿// Wraps the support inquiry submission and admin listing API calls for the contact form and admin support feed.
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';

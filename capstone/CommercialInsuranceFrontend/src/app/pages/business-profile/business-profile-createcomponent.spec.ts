@@ -1,3 +1,8 @@
+﻿/**
+ * Test Suite for business-profile-createcomponent
+ * Layer: Angular Component Navigation & DOM
+ * Purpose: Validates component instantiation, automated DOM compilation, and verifies correct isolated dependency ingestion.
+ */
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';

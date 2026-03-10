@@ -1,4 +1,4 @@
-// Component responsible for handling new user registration, capturing their details, and interacting with the authentication service.
+﻿// User registration form with validation, reCAPTCHA, and redirect to login on success.
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,13 +13,19 @@ import { AuthService } from '../../services/authservice';
   styleUrl: './registercomponent.css'
 })
 export class RegisterComponent {
+// State and data property: fullName
   fullName = '';
+// State and data property: email
   email = '';
+// State and data property: password
   password = '';
+// State and data property: loading
   loading = signal(false);
+// State and data property: error
   error = signal('');
 
   constructor(private authService: AuthService, private router: Router) { }
+// Triggered organically on form submission, intercepts click handling to validate and process payload
 
   onSubmit() {
     this.loading.set(true);

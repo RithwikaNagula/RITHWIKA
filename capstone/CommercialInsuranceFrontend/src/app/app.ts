@@ -1,3 +1,4 @@
+﻿// Root application component. Bootstraps the Angular app, applies the saved theme (dark/light) on load, and hosts the top-level router outlet.
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbarcomponent';

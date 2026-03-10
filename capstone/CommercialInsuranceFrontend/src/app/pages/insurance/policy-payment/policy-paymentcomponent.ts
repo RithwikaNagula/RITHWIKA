@@ -1,4 +1,4 @@
-// Component guiding the user through the process of making payments for their chosen insurance policies.
+﻿// Payment form displayed after a policy is approved; submits premium payment and transitions the policy to Active on success.
 import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,13 +20,20 @@ export class PolicyPaymentComponent implements OnInit {
   private paymentService = inject(PaymentService);
   private authService = inject(AuthService);
 
+// State and data property: policy
   policy = signal<PolicyDto | null>(null);
+// State and data property: loading
   loading = signal(false);
+// State and data property: error
   error = signal<string | null>(null);
+// State and data property: selectedFrequency
   selectedFrequency = signal<string>('');
+// State and data property: selectedMode
   selectedMode = signal<string>('');
 
+// State and data property: today
   today = new Date();
+// State and data property: endDate
   endDate = new Date(new Date().setMonth(new Date().getMonth() + 12));
 
   frequencyOptions: { label: string; value: string; amount: number; installments: number }[] = [];
@@ -40,6 +47,7 @@ export class PolicyPaymentComponent implements OnInit {
 
   breakdown = signal<PremiumBreakdown>({ annual: 0, monthly: 0, quarterly: 0, halfYearly: 0, annually: 0 });
 
+// State and data property: canPay
   canPay = computed(() => !!this.selectedFrequency() && !!this.selectedMode());
 
   selectedAmount = computed(() => {
@@ -60,6 +68,7 @@ export class PolicyPaymentComponent implements OnInit {
     if (f === 'Annually') return 1;
     return 0;
   });
+// Lifecycle hook: Initialization phase where initial data is loaded from services
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
@@ -84,10 +93,12 @@ export class PolicyPaymentComponent implements OnInit {
     }
   }
 
+// Executes core logic for selectFrequency
   selectFrequency(value: string) {
     this.selectedFrequency.set(value);
   }
 
+// Event listener hook triggered by confirmPayment
   confirmPayment() {
     const p = this.policy();
     if (!p || !this.canPay()) return;
@@ -111,5 +122,4 @@ export class PolicyPaymentComponent implements OnInit {
     });
   }
 }
-
 

@@ -1,4 +1,4 @@
-// Component for users to establish and manage their company's core business profile, which is required for accurate quote generation.
+﻿// Form for customers to create or update their business profile (company name, type, industry, address) required before purchasing a policy.
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,9 @@ export class BusinessProfileCreateComponent {
     private profileService = inject(BusinessProfileService);
     private router = inject(Router);
 
+// State and data property: loading
     loading = signal(false);
+// State and data property: errorMessage
     errorMessage = signal('');
 
     profile: CreateBusinessProfileDto = {
@@ -26,6 +28,7 @@ export class BusinessProfileCreateComponent {
         employeeCount: 1,
         city: ''
     };
+// Triggered organically on form submission, intercepts click handling to validate and process payload
 
     onSubmit() {
         this.loading.set(true);
@@ -46,7 +49,6 @@ export class BusinessProfileCreateComponent {
         });
     }
 }
-
 
 
 

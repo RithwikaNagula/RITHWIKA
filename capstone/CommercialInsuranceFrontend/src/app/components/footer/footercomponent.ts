@@ -1,3 +1,4 @@
+﻿// Static footer component with company branding, navigation links, and copyright information.
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -9,4 +10,3 @@ import { RouterLink } from '@angular/router';
     styleUrl: './footercomponent.css'
 })
 export class FooterComponent { }
-

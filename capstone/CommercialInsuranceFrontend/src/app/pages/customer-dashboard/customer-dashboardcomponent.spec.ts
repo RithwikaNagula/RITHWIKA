@@ -1,3 +1,8 @@
+﻿/**
+ * Test Suite for customer-dashboardcomponent
+ * Layer: Angular Component Navigation & DOM
+ * Purpose: Validates component instantiation, automated DOM compilation, and verifies correct isolated dependency ingestion.
+ */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { CustomerDashboardComponent } from './customer-dashboardcomponent';
 import { PolicyService } from '../../services/policyservice';

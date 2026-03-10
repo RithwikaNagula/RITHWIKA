@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// Wraps API calls for creating and retrieving the business profile associated with the authenticated customer.
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';

@@ -1,18 +1,18 @@
 <div class="space-y-12 py-10 transition-colors duration-300">
     <div class="max-w-3xl">
-        <span class="text-xs font-bold text-taupe-600 dark:text-taupe-400 uppercase tracking-widest mb-4 block">System
+        <span class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-4 block">System
             Intelligence</span>
-        <h2 class="text-3xl font-black text-taupe-900 dark:text-white tracking-tight uppercase leading-none mb-4">
+        <h2 class="text-3xl font-black text-brand-900 dark:text-white tracking-tight uppercase leading-none mb-4">
             Analytics Dashboard
         </h2>
-        <p class="text-taupe-500 dark:text-taupe-400 font-medium leading-relaxed">Real-time telemetry monitoring of
+        <p class="text-brand-500 dark:text-brand-400 font-medium leading-relaxed">Real-time telemetry monitoring of
             platform performance,
             user engagement, and financial metrics.</p>
     </div>
 
     <div *ngIf="loading()" class="py-20 flex justify-center">
         <div
-            class="animate-spin rounded-full h-10 w-10 border-2 border-taupe-100 dark:border-taupe-800 border-t-taupe-600 dark:border-t-taupe-400">
+            class="animate-spin rounded-full h-10 w-10 border-2 border-brand-100 dark:border-brand-800 border-t-gray-600 dark:border-t-gray-400">
         </div>
     </div>
 
@@ -28,83 +28,123 @@
     <div *ngIf="!loading() && !error() && stats()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Users Card -->
         <div
-            class="bg-white dark:bg-[#1C1517] p-8 rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm hover:shadow-md transition-all duration-300">
-            <p class="text-[10px] font-black text-taupe-400 dark:text-taupe-500 uppercase tracking-[0.2em] mb-4">Total
+            class="bg-white dark:bg-brand-800 p-8 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm hover:shadow-md transition-all duration-300">
+            <p class="text-sm font-black text-brand-400 dark:text-brand-500 uppercase tracking-wide mb-4">Total
                 Users</p>
-            <h3 class="text-4xl font-black text-taupe-900 dark:text-white tracking-tighter">{{ stats()?.totalUsers }}
+            <h3 class="text-4xl font-black text-brand-900 dark:text-white tracking-tighter">{{ stats()?.totalUsers }}
             </h3>
-            <div class="mt-4 pt-4 border-t border-taupe-50 dark:border-taupe-900/50">
+            <div class="mt-4 pt-4 border-t border-brand-100 dark:border-brand-800">
                 <span
-                    class="text-[9px] font-bold text-taupe-400 dark:text-taupe-500 uppercase tracking-widest italic">Registered
+                    class="text-xs font-bold text-brand-400 dark:text-brand-500 uppercase tracking-widest italic">Registered
                     Core</span>
             </div>
         </div>
 
         <!-- Agents Card -->
         <div
-            class="bg-white dark:bg-[#1C1517] p-8 rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm hover:shadow-md transition-all duration-300">
-            <p class="text-[10px] font-black text-taupe-400 dark:text-taupe-500 uppercase tracking-[0.2em] mb-4">Total
+            class="bg-white dark:bg-brand-800 p-8 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm hover:shadow-md transition-all duration-300">
+            <p class="text-sm font-black text-brand-400 dark:text-brand-500 uppercase tracking-wide mb-4">Total
                 Agents</p>
-            <h3 class="text-4xl font-black text-taupe-900 dark:text-white tracking-tighter">{{ stats()?.totalAgents }}
+            <h3 class="text-4xl font-black text-brand-900 dark:text-white tracking-tighter">{{ stats()?.totalAgents }}
             </h3>
-            <div class="mt-4 pt-4 border-t border-taupe-50 dark:border-taupe-900/50">
+            <div class="mt-4 pt-4 border-t border-brand-100 dark:border-brand-800">
                 <span
-                    class="text-[9px] font-bold text-taupe-600 dark:text-taupe-400 uppercase tracking-widest italic">Field
+                    class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest italic">Field
                     Personnel</span>
             </div>
         </div>
 
         <!-- Claims Officers Card -->
         <div
-            class="bg-white dark:bg-[#1C1517] p-8 rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm hover:shadow-md transition-all duration-300">
-            <p class="text-[10px] font-black text-taupe-400 dark:text-taupe-500 uppercase tracking-[0.2em] mb-4">Claims
+            class="bg-white dark:bg-brand-800 p-8 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm hover:shadow-md transition-all duration-300">
+            <p class="text-sm font-black text-brand-400 dark:text-brand-500 uppercase tracking-wide mb-4">Claims
                 Specialists</p>
-            <h3 class="text-4xl font-black text-taupe-900 dark:text-white tracking-tighter">{{
+            <h3 class="text-4xl font-black text-brand-900 dark:text-white tracking-tighter">{{
                 stats()?.totalClaimsOfficers }}</h3>
-            <div class="mt-4 pt-4 border-t border-taupe-50 dark:border-taupe-900/50">
+            <div class="mt-4 pt-4 border-t border-brand-100 dark:border-brand-800">
                 <span
-                    class="text-[9px] font-bold text-taupe-400 dark:text-taupe-500 uppercase tracking-widest italic">Audit
+                    class="text-xs font-bold text-brand-400 dark:text-brand-500 uppercase tracking-widest italic">Audit
                     Unit</span>
             </div>
         </div>
 
         <!-- Policies Card -->
         <div
-            class="bg-white dark:bg-[#1C1517] p-8 rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm hover:shadow-md transition-all duration-300">
-            <p class="text-[10px] font-black text-taupe-400 dark:text-taupe-500 uppercase tracking-[0.2em] mb-4">Active
+            class="bg-white dark:bg-brand-800 p-8 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm hover:shadow-md transition-all duration-300">
+            <p class="text-sm font-black text-brand-400 dark:text-brand-500 uppercase tracking-wide mb-4">Active
                 Portfolio</p>
-            <h3 class="text-4xl font-black text-taupe-900 dark:text-white tracking-tighter mb-4">{{
+            <h3 class="text-4xl font-black text-brand-900 dark:text-white tracking-tighter mb-4">{{
                 stats()?.totalPolicies }}</h3>
             <span
-                class="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">
+                class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">
                 {{ stats()?.activePolicies }} Live
             </span>
         </div>
 
         <!-- Claims Card -->
         <div
-            class="bg-white dark:bg-[#1C1517] p-8 rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm hover:shadow-md transition-all duration-300">
-            <p class="text-[10px] font-black text-taupe-400 dark:text-taupe-500 uppercase tracking-[0.2em] mb-4">Open
+            class="bg-white dark:bg-brand-800 p-8 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm hover:shadow-md transition-all duration-300">
+            <p class="text-sm font-black text-brand-400 dark:text-brand-500 uppercase tracking-wide mb-4">Open
                 Incidents</p>
-            <h3 class="text-4xl font-black text-taupe-900 dark:text-white tracking-tighter mb-4">{{ stats()?.totalClaims
+            <h3 class="text-4xl font-black text-brand-900 dark:text-white tracking-tighter mb-4">{{ stats()?.totalClaims
                 }}</h3>
             <span
-                class="inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30">
+                class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30">
                 {{ stats()?.pendingClaims }} Pending
             </span>
         </div>
 
         <!-- Revenue Card -->
         <div
-            class="bg-white dark:bg-[#1C1517] p-8 rounded-[2.5rem] border border-taupe-100 dark:border-[#2E2122] shadow-sm hover:shadow-md transition-all duration-300">
-            <p class="text-[10px] font-black text-taupe-400 dark:text-taupe-500 uppercase tracking-[0.2em] mb-4">
+            class="bg-white dark:bg-brand-800 p-8 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm hover:shadow-md transition-all duration-300">
+            <p class="text-sm font-black text-brand-400 dark:text-brand-500 uppercase tracking-wide mb-4">
                 Platform Revenue</p>
-            <h3 class="text-4xl font-black text-taupe-900 dark:text-white tracking-tighter">{{ stats()?.totalRevenue |
+            <h3 class="text-4xl font-black text-brand-900 dark:text-white tracking-tighter">{{ stats()?.totalRevenue |
                 currency:'INR':'symbol':'1.0-0' }}</h3>
-            <div class="mt-4 pt-4 border-t border-taupe-50 dark:border-taupe-900/50">
+            <div class="mt-4 pt-4 border-t border-brand-100 dark:border-brand-800">
                 <span
-                    class="text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest italic">Capital
+                    class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest italic">Capital
                     Inflow</span>
+            </div>
+        </div>
+    </div>
+    <!-- Simplified Performance Charts -->
+    <div *ngIf="!loading() && !error()" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 pb-12">
+
+        <!-- Agent Performance (Radial) -->
+        <div
+            class="bg-white dark:bg-brand-800 p-10 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm flex flex-col items-center">
+            <div class="w-full mb-8">
+                <span class="text-sm font-black text-brand-400 uppercase tracking-wider mb-2 block">Acquisition
+                    Force</span>
+                <h4 class="text-2xl font-black text-brand-900 dark:text-white uppercase tracking-tight">Agent
+                    Performance</h4>
+            </div>
+            <div *ngIf="agentRadialOptions" class="w-full flex justify-center min-h-[380px]">
+                <apx-chart class="w-full max-w-[450px]" [series]="agentRadialOptions.series!"
+                    [chart]="agentRadialOptions.chart!" [plotOptions]="agentRadialOptions.plotOptions!"
+                    [labels]="agentRadialOptions.labels!" [colors]="agentRadialOptions.colors!"
+                    [legend]="agentRadialOptions.legend!">
+                </apx-chart>
+            </div>
+        </div>
+
+        <!-- Claims Officer Performance (Area) -->
+        <div
+            class="bg-white dark:bg-brand-800 p-10 rounded-[2.5rem] border border-brand-100 dark:border-brand-800 shadow-sm flex flex-col">
+            <div class="w-full mb-8">
+                <span class="text-sm font-black text-brand-400 uppercase tracking-wider mb-2 block">Operational
+                    Velocity</span>
+                <h4 class="text-2xl font-black text-brand-900 dark:text-white uppercase tracking-tight">Officer
+                    Performance</h4>
+            </div>
+            <div *ngIf="settlementsAreaOptions" class="w-full min-h-[380px] flex items-end">
+                <apx-chart class="w-full" [series]="settlementsAreaOptions.series!"
+                    [chart]="settlementsAreaOptions.chart!" [xaxis]="settlementsAreaOptions.xaxis!"
+                    [yaxis]="settlementsAreaOptions.yaxis!" [stroke]="settlementsAreaOptions.stroke!"
+                    [colors]="settlementsAreaOptions.colors!" [fill]="settlementsAreaOptions.fill!"
+                    [grid]="settlementsAreaOptions.grid!" [tooltip]="settlementsAreaOptions.tooltip!">
+                </apx-chart>
             </div>
         </div>
     </div>

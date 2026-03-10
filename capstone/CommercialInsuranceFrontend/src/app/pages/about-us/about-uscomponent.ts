@@ -1,3 +1,4 @@
+﻿// Static about-us page component.
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -11,4 +12,3 @@ import { RouterLink } from '@angular/router';
 export class AboutUs {
 
 }
-

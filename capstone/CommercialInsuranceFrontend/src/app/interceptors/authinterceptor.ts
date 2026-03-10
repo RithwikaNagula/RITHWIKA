@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// HTTP interceptor that attaches the stored JWT as a Bearer token on every outgoing API request.
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/authservice';

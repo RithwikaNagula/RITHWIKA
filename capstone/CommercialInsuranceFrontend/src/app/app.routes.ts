@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// Defines the full client-side route table: lazy-loaded dashboard shells, role-gated pages (auth guard), and child routes for admin/agent/claims officer/customer.
 import { Routes } from '@angular/router';
 import { LandingPageComponent } from './pages/landing-page/landing-pagecomponent';
 import { LoginComponent } from './pages/login/logincomponent';

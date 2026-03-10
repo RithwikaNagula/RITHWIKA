@@ -1,3 +1,4 @@
+﻿// Connects to the SignalR NotificationHub, subscribes to real-time events, and exposes an observable notification stream to the navbar.
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 

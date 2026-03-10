@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// Route guard that checks for a valid JWT and the required user role before allowing navigation; redirects to /login if not authenticated.
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/authservice';

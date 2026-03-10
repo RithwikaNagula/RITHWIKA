@@ -1,9 +1,8 @@
-// Implementing core module functionality and external dependencies.
+﻿// Wraps payment initiation and confirmation API calls; used on the payment screen after a policy is approved.
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// ───── Interfaces ─────
 export interface CreatePaymentDto {
     policyId: string;
     paymentFrequency: string;

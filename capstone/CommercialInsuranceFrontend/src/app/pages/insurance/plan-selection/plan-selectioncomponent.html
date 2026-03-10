@@ -1,119 +1,349 @@
-<div class="min-h-screen bg-taupe-50/30 dark:bg-[#1A1314]/30 py-20 relative overflow-hidden">
+<div class="min-h-screen bg-brand-50/30 dark:bg-brand-800/30 py-20 relative overflow-hidden">
   <!-- Decorative Elements -->
-  <div class="absolute top-0 right-0 w-[40%] h-[40%] bg-taupe-100/20 dark:bg-[#201819]/20 rounded-full blur-[120px] pointer-events-none">
+  <div
+    class="absolute top-0 right-0 w-[40%] h-[40%] bg-brand-100/20 dark:bg-brand-800/20 rounded-full blur-[120px] pointer-events-none">
   </div>
-  <div class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-taupe-50/30 dark:bg-[#1A1314]/30 rounded-full blur-[120px] pointer-events-none">
+  <div
+    class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-brand-50/30 dark:bg-brand-800/30 rounded-full blur-[120px] pointer-events-none">
   </div>
 
   <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
     <!-- Breadcrumbs -->
-    <nav class="flex mb-12 text-[10px] font-bold uppercase tracking-[0.3em] text-taupe-400">
-      <a routerLink="/" class="hover:text-taupe-600 transition-colors">Categories</a>
+    <nav class="flex mb-6 text-sm font-bold uppercase tracking-wide text-brand-400">
+      <a routerLink="/" class="hover:text-brand-600 transition-colors">Categories</a>
       <div class="mx-3 opacity-30">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"
           class="w-2.5 h-2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
         </svg>
       </div>
-      <span class="text-taupe-700 dark:text-taupe-300">Select Plan</span>
+      <span class="text-brand-800 dark:text-brand-300">Select Plan</span>
     </nav>
 
-    <div class="max-w-3xl mb-16">
-      <span class="text-[10px] font-bold text-taupe-500 uppercase tracking-[0.4em] mb-4 block leading-none">Tailored
-        Insurance
-        Levels</span>
-      <h1 class="text-4xl md:text-5xl font-semibold text-taupe-700 dark:text-taupe-300 tracking-tight uppercase leading-none mb-6">Choose
-        Your
-        <span class="text-taupe-500">Plan</span>
-      </h1>
-      <p class="text-taupe-500 font-medium text-sm md:text-base leading-relaxed max-w-xl">
-        Select from our tiered plans designed to provide optimal protection for your business assets and liabilities.
-      </p>
-    </div>
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10 animate-slide-up">
+      <div class="max-w-2xl">
+        <span class="text-sm font-black text-brand-500 uppercase tracking-wider mb-4 block leading-none">Tailored
+          Insurance
+          Levels</span>
+        <h1
+          class="text-4xl md:text-5xl font-semibold text-brand-800 dark:text-brand-300 tracking-tight uppercase leading-none mb-6">
+          Choose
+          Your
+          <span class="text-brand-600">Plan</span>
+        </h1>
+        <p class="text-brand-500 font-medium text-sm md:text-base leading-relaxed max-w-xl">
+          Select from our tiered plans designed to provide optimal protection for your business assets and liabilities.
+        </p>
+      </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div *ngFor="let plan of plans()"
-        class="flex flex-col bg-white dark:bg-[#1A1314] rounded-[2.5rem] border border-taupe-100 dark:border-taupe-800 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.02)] hover:shadow-xl transition-all duration-500 overflow-hidden group">
+      <!-- NEW: Advanced Filter Bar -->
+      <div class="flex-1 max-w-2xl w-full">
+        <div
+          class="bg-white dark:bg-brand-800 p-6 rounded-3xl border border-brand-100 dark:border-brand-800 shadow-premium">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Search -->
+            <div class="space-y-3">
+              <label class="block text-xs font-black text-brand-400 uppercase tracking-widest">Search Plan</label>
+              <div class="relative group">
+                <input type="text" [(ngModel)]="searchText"
+                  class="w-full bg-brand-50 dark:bg-brand-800 border border-brand-100 dark:border-brand-800 rounded-xl px-4 py-2.5 text-xs text-brand-700 dark:text-white outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 transition-all font-medium"
+                  placeholder="e.g. Premium">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="h-3.5 w-3.5 absolute right-3 top-1/2 -translate-y-1/2 text-brand-300" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
 
-        <!-- Plan Header -->
-        <div class="p-8 pb-0">
-          <div class="inline-flex items-center px-4 py-1.5 bg-taupe-50 dark:bg-[#1A1314] rounded-xl mb-6 border border-taupe-100/50 dark:border-taupe-800/50">
-            <span class="text-[9px] text-taupe-500 uppercase font-bold tracking-widest leading-none">{{
-              plan.insuranceTypeName }}</span>
-          </div>
-          <h3
-            class="text-2xl font-bold text-taupe-700 dark:text-taupe-300 mb-6 uppercase tracking-tight group-hover:text-taupe-500 transition-colors">
-            {{ plan.planName }}</h3>
+            <!-- Price Range -->
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <label class="block text-xs font-black text-brand-400 uppercase tracking-widest">Max Premium</label>
+                <span class="text-sm font-bold text-brand-600 dark:text-brand-300">₹{{ priceLimit() | number
+                  }}</span>
+              </div>
+              <input type="range" [(ngModel)]="priceLimit" min="0" max="50000" step="1000"
+                class="w-full h-1.5 bg-brand-100 dark:bg-brand-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+            </div>
 
-          <div class="mb-8">
-            <p class="text-[9px] font-bold text-taupe-400 uppercase tracking-[0.2em] mb-3 leading-none">Monthly Payment
-            </p>
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-4xl font-bold tracking-tight text-taupe-700 dark:text-taupe-300">₹{{ (plan.basePremium > 0 ?
-                plan.basePremium : 150) | number }}</span>
-              <span class="text-[10px] font-bold text-taupe-400 uppercase tracking-widest">/ period</span>
+            <!-- Sort -->
+            <div class="space-y-3">
+              <label class="block text-xs font-black text-brand-400 uppercase tracking-widest">Sort By</label>
+              <div class="relative">
+                <select [(ngModel)]="sortBy"
+                  class="w-full bg-brand-50 dark:bg-brand-800 border border-brand-100 dark:border-brand-800 rounded-xl px-4 py-2.5 text-xs text-brand-700 dark:text-white outline-none appearance-none cursor-pointer font-bold uppercase tracking-tight focus:ring-4 focus:ring-brand-500/10">
+                  <option value="none">Default</option>
+                  <option value="premium-asc">Cheapest First</option>
+                  <option value="premium-desc">High Value</option>
+                  <option value="coverage-desc">Max Coverage</option>
+                </select>
+                <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-brand-400">
+                  <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 9l-7 7-7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Plan Body -->
-        <div class="p-8 pt-0 flex-1">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let plan of filteredPlans(); let i = index" (click)="openDetails(plan)"
+        class="group relative flex flex-col bg-white dark:bg-brand-800 rounded-[2.5rem] border border-brand-100/60 dark:border-brand-800 shadow-sm hover:shadow-2xl hover:shadow-brand-500/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden animate-slide-up cursor-pointer"
+        [style.animationDelay]="(i * 100) + 'ms'">
+
+        <!-- Premium Accent Bar -->
+        <div
+          class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand-400 to-brand-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        </div>
+
+        <!-- Plan Media -->
+        <div *ngIf="plan.imageUrl" class="relative h-48 overflow-hidden">
+          <img [src]="'http://localhost:5202' + plan.imageUrl"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+            [alt]="plan.planName">
           <div
-            class="mb-8 p-6 bg-taupe-50/50 dark:bg-[#1A1314]/50 rounded-2xl border border-taupe-100/50 dark:border-taupe-800/50 group-hover:bg-white transition-colors">
-            <p class="text-[9px] text-taupe-400 font-bold uppercase tracking-widest mb-3 leading-none">
-              Maximum Coverage</p>
-            <p class="text-2xl font-bold text-taupe-700 dark:text-taupe-300 tracking-tight">₹{{ (plan.maxCoverageAmount > 0 ?
-              plan.maxCoverageAmount : 500000) | number }}</p>
+            class="absolute inset-0 bg-gradient-to-t from-white dark:from-brand-900 via-transparent to-transparent opacity-80">
+          </div>
+        </div>
+
+        <!-- Plan Content -->
+        <div class="px-8 pt-8 pb-6 flex-1 flex flex-col">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="inline-flex items-center px-4 py-1.5 bg-brand-50/80 dark:bg-brand-700/50 backdrop-blur-sm rounded-full border border-brand-100/50 dark:border-brand-700">
+              <span
+                class="text-[10px] text-brand-600 dark:text-brand-400 uppercase font-black tracking-[0.15em] leading-none">{{
+                plan.insuranceTypeName }}</span>
+            </div>
+            <div *ngIf="i === 1"
+              class="text-[10px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-100 dark:border-emerald-500/20">
+              Most Popular</div>
           </div>
 
-          <ul class="space-y-4 px-2">
-            <li *ngFor="let benefit of getBenefits(plan.description)" class="flex items-start gap-4">
+          <h3
+            class="text-2xl font-black text-brand-900 dark:text-white mb-6 tracking-tight group-hover:text-brand-600 transition-colors leading-tight">
+            {{ plan.planName }}</h3>
+
+          <!-- Pricing Block -->
+          <div
+            class="mb-6 p-6 bg-brand-50/50 dark:bg-brand-900/20 rounded-3xl border border-brand-100/50 dark:border-brand-700/30 group-hover:bg-brand-50/80 group-hover:border-brand-200/50 transition-all duration-500">
+            <p
+              class="text-[10px] font-black text-brand-400 uppercase tracking-widest mb-3 leading-none italic opacity-80">
+              Monthly Investment</p>
+            <div class="flex items-baseline gap-2">
+              <span class="text-4xl font-black tracking-tighter text-brand-900 dark:text-white">₹{{ (plan.basePremium >
+                0 ?
+                plan.basePremium : 150) | number }}</span>
+              <span class="text-xs font-bold text-brand-400 uppercase tracking-[0.2em] italic">/ mo</span>
+            </div>
+          </div>
+
+          <!-- Coverage Metrics Table-style -->
+          <div class="mb-8 space-y-4">
+            <div class="flex items-center justify-between px-2">
+              <span class="text-[10px] font-black text-brand-400 uppercase tracking-widest">Digital Vault
+                Coverage</span>
+              <span class="text-sm font-black text-brand-900 dark:text-white tracking-tight">₹{{ (plan.maxCoverageAmount
+                > 0 ? plan.maxCoverageAmount : 500000) | number }}</span>
+            </div>
+            <div class="h-px bg-gradient-to-r from-transparent via-brand-100 dark:via-brand-800 to-transparent"></div>
+          </div>
+
+          <!-- Feature Manifest -->
+          <ul class="space-y-4 px-2 mb-8 flex-1">
+            <li *ngFor="let benefit of getBenefits(plan.description).slice(0, 3)" class="flex items-start gap-4">
               <div
-                class="w-5 h-5 bg-taupe-50 dark:bg-[#1A1314] rounded-lg flex items-center justify-center text-taupe-500 mt-0.5 shrink-0 border border-taupe-100 dark:border-taupe-800">
+                class="w-5 h-5 bg-brand-500/10 dark:bg-brand-500/20 rounded-lg flex items-center justify-center text-brand-500 mt-0.5 shrink-0 border border-brand-500/20">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4"
                   stroke="currentColor" class="w-2.5 h-2.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
-              <span class="text-[11px] font-semibold text-taupe-500 leading-tight uppercase tracking-tight">{{ benefit
+              <span class="text-sm font-medium text-brand-600 dark:text-brand-300 leading-snug tracking-tight">{{
+                benefit
                 }}</span>
             </li>
+            <li *ngIf="getBenefits(plan.description).length > 3" class="pl-9">
+              <span
+                class="text-[10px] font-black text-brand-400 uppercase tracking-widest bg-brand-50 dark:bg-brand-900/40 px-3 py-1 rounded-lg border border-brand-100 dark:border-brand-800">+
+                {{
+                getBenefits(plan.description).length - 3 }} core protocols</span>
+            </li>
           </ul>
-        </div>
 
-        <!-- Plan Footer -->
-        <div class="p-8 pt-0">
-          <button (click)="onGenerateQuote(plan)" [disabled]="loadingQuote() === plan.id"
-            class="w-full bg-taupe-700 hover:bg-taupe-800 disabled:bg-taupe-100 text-white rounded-2xl py-5 px-6 text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl shadow-taupe-900/10 transition-all active:scale-95 group/btn">
-            {{ loadingQuote() === plan.id ? 'Processing...' : 'Get This Plan' }}
-          </button>
+          <!-- Action Center -->
+          <div class="mt-auto">
+            <button (click)="onGenerateQuote(plan); $event.stopPropagation()" [disabled]="loadingQuote() === plan.id"
+              class="relative w-full py-5 bg-brand-900 dark:bg-brand-700 hover:bg-brand-950 dark:hover:bg-brand-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-xl shadow-brand-900/20 hover:shadow-brand-900/40 active:scale-95 transition-all duration-300 group/btn overflow-hidden">
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover/btn:animate-shimmer">
+              </div>
+              <span *ngIf="loadingQuote() !== plan.id" class="relative z-10 flex items-center justify-center gap-3">
+                Select Plan
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-2" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M13.75 6.75L19.25 12L13.75 17.25M18.5 12H4.75" />
+                </svg>
+              </span>
+              <span *ngIf="loadingQuote() === plan.id" class="relative z-10 flex items-center justify-center gap-2">
+                <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+                Processing...
+              </span>
+            </button>
 
-          <div class="mt-8 flex items-center justify-center gap-2 opacity-50">
-            <svg class="w-4 h-4 text-taupe-400" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span class="text-[9px] font-bold text-taupe-400 uppercase tracking-widest leading-none">Annual Cycle ({{
-              plan.durationInMonths }} Mo)</span>
+            <div
+              class="mt-6 flex items-center justify-center gap-3 opacity-40 group-hover:opacity-100 transition-opacity">
+              <div class="w-1.5 h-1.5 rounded-full bg-brand-400"></div>
+              <span
+                class="text-[10px] font-black text-brand-400 dark:text-brand-500 uppercase tracking-[0.25em] leading-none">
+                {{ plan.durationInMonths }} Month Term
+              </span>
+              <div class="w-1.5 h-1.5 rounded-full bg-brand-400"></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div *ngIf="plans().length === 0"
-        class="col-span-full border border-dashed border-taupe-100 dark:border-taupe-800 rounded-[2.5rem] py-24 text-center bg-white dark:bg-[#1A1314]">
-        <div
-          class="w-16 h-16 bg-taupe-50 dark:bg-[#1A1314] rounded-2xl flex items-center justify-center mx-auto mb-6 border border-taupe-100 dark:border-taupe-800 shadow-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-taupe-200" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
-        <p class="text-[10px] font-bold text-taupe-300 uppercase tracking-widest mb-4">No plans found in this segment
-        </p>
-        <a routerLink="/"
-          class="text-taupe-500 font-bold text-[10px] uppercase tracking-widest hover:underline transition-all">Browse
-          all categories</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── PLAN DETAILS MODAL ────────────────────────────────────────── -->
+<div *ngIf="selectedPlan()" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-brand-950/60 backdrop-blur-sm animate-in fade-in duration-300"
+    (click)="closeDetails()"></div>
+
+  <!-- Modal Content -->
+  <div
+    class="relative w-full max-w-2xl bg-white dark:bg-brand-800 rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 border border-white/20 dark:border-brand-700/50">
+
+    <!-- Header Image -->
+    <div class="relative h-48 sm:h-64 overflow-hidden">
+      <img [src]="'http://localhost:5202' + selectedPlan()!.imageUrl" class="w-full h-full object-cover"
+        [alt]="selectedPlan()!.planName">
+      <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-brand-800 via-brand-900/20 to-transparent">
       </div>
+
+      <!-- Close Button -->
+      <button (click)="closeDetails()"
+        class="absolute top-6 right-6 w-10 h-10 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition-all">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Badge -->
+      <div class="absolute bottom-6 left-8">
+        <span
+          class="px-4 py-1.5 bg-brand-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg">
+          {{ selectedPlan()!.insuranceTypeName }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="p-8 sm:p-10">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-black text-brand-900 dark:text-white tracking-tight leading-none mb-4">
+            {{ selectedPlan()!.planName }}
+          </h2>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-brand-400 uppercase tracking-widest italic">Plan ID:</span>
+            <span class="font-mono text-xs text-brand-600 dark:text-brand-400 font-bold uppercase">{{
+              selectedPlan()!.id.substring(0,13) }}...</span>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="text-[10px] font-black text-brand-400 uppercase tracking-widest mb-1.5 leading-none">Investment
+            Scale</p>
+          <div class="flex items-baseline gap-1.5 justify-end">
+            <span class="text-4xl font-black text-brand-900 dark:text-white tracking-tighter">₹{{
+              selectedPlan()!.basePremium | number }}</span>
+            <span class="text-sm font-bold text-brand-400 uppercase tracking-widest">/MO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+        <!-- Coverage Info -->
+        <div class="bg-brand-50 dark:bg-brand-900/40 rounded-3xl p-6 border border-brand-100 dark:border-brand-700/50">
+          <p class="text-[10px] font-black text-brand-400 uppercase tracking-widest mb-4">Coverage Parameters</p>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-brand-500 uppercase tracking-wide">Minimum</span>
+              <span class="text-base font-black text-brand-900 dark:text-white tracking-tight">₹{{
+                selectedPlan()!.minCoverageAmount | number }}</span>
+            </div>
+            <div class="h-px bg-brand-100 dark:bg-brand-700/50"></div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-brand-400 uppercase tracking-wide">Maximum Cap</span>
+              <span class="text-xl font-black text-brand-500 dark:text-brand-400 tracking-tight">₹{{
+                selectedPlan()!.maxCoverageAmount | number }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duration Info -->
+        <div class="bg-brand-50 dark:bg-brand-900/40 rounded-3xl p-6 border border-brand-100 dark:border-brand-700/50">
+          <p class="text-[10px] font-black text-brand-400 uppercase tracking-widest mb-4">Policy Term</p>
+          <div class="flex flex-col justify-center h-[calc(100%-2rem)]">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 bg-white dark:bg-brand-800 rounded-2xl flex items-center justify-center text-brand-500 shadow-sm">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-2xl font-black text-brand-900 dark:text-white tracking-tighter">{{
+                  selectedPlan()!.durationInMonths }} Months</p>
+                <p class="text-[10px] font-bold text-brand-400 uppercase tracking-widest">Policy Period</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full Description -->
+      <div class="mb-10">
+        <h4 class="text-xs font-black text-brand-900 dark:text-white uppercase tracking-widest mb-4">Plan Benefits</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-3">
+          <div *ngFor="let benefit of getBenefits(selectedPlan()!.description)" class="flex items-start gap-3">
+            <svg class="w-4 h-4 text-emerald-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            <span class="text-sm font-medium text-brand-700 dark:text-brand-300 leading-relaxed tracking-tight">{{
+              benefit }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button (click)="onGenerateQuote(selectedPlan()!); closeDetails()"
+        [disabled]="loadingQuote() === selectedPlan()!.id"
+        class="btn-primary w-full py-5 rounded-[1.5rem] shadow-2xl shadow-brand-500/20 active:scale-[0.98]">
+        <span *ngIf="loadingQuote() !== selectedPlan()!.id">Generate Quote</span>
+        <span *ngIf="loadingQuote() === selectedPlan()!.id" class="flex items-center justify-center gap-2">
+          Processing Application...
+        </span>
+      </button>
     </div>
   </div>
 </div>

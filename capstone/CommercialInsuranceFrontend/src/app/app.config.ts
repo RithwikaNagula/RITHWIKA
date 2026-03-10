@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// Angular application configuration: registers the router, HTTP client with fetch API, and other providers needed at bootstrap.
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';

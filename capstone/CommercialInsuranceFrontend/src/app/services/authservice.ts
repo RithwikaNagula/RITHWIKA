@@ -1,4 +1,4 @@
-// this service handles everything related to user login registration and identity management
+﻿// Manages session state: stores/retrieves the JWT and user object from localStorage, exposes a reactive currentUser signal, and wraps login/register/logout API calls.
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -47,23 +47,28 @@ export class AuthService {
         );
     }
 
+    // Registers a new customer; does NOT auto-login — redirects to the login page after success.
     register(dto: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/register`, dto);
     }
 
     // this function clears the saved user data to log them out of the application
+    // Clears the JWT and user data from localStorage and resets the currentUser signal to null.
+    // Invokes the AuthService to safely purge the local JWT session token and securely navigate to the login route
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         this.currentUser.set(null);
     }
 
+    // Reads the raw JWT string from localStorage; used by the auth interceptor to attach it to requests.
     getToken(): string | null {
         return localStorage.getItem('token');
     }
 
     isAuthenticated(): boolean {
-        return !!this.getToken();
+        return !!this.// Reads the raw JWT string from localStorage; used by the auth interceptor to attach it to requests.
+            getToken();
     }
 
     isAdmin(): boolean {
@@ -88,5 +93,23 @@ export class AuthService {
 
     resetPassword(dto: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/reset-password`, dto);
+    }
+
+    updateProfile(dto: any): Observable<UserDto> {
+        return this.http.put<UserDto>(`${this.apiUrl}/update-profile`, dto).pipe(
+            tap(user => {
+                localStorage.setItem('user', JSON.stringify(user));
+                this.currentUser.set(user);
+            })
+        );
+    }
+
+    getProfile(): Observable<UserDto> {
+        return this.http.get<UserDto>(`${this.apiUrl}/profile`).pipe(
+            tap(user => {
+                localStorage.setItem('user', JSON.stringify(user));
+                this.currentUser.set(user);
+            })
+        );
     }
 }

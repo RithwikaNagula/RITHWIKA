@@ -1,187 +1,232 @@
-<div class="min-h-screen bg-taupe-50 dark:bg-[#1A1314] flex items-center justify-center py-12 px-6 relative overflow-hidden">
-  <!-- Decorative Elements -->
-  <div class="absolute top-0 right-0 w-[40%] h-[40%] bg-taupe-100/20 dark:bg-[#201819]/20 rounded-full blur-[120px] pointer-events-none">
+<div
+  class="min-h-screen bg-brand-50 dark:bg-brand-950 flex font-['Inter',sans-serif] items-center justify-center py-20 px-6 relative overflow-hidden">
+
+  <!-- Modern Background Accents -->
+  <div
+    class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-500/5 dark:bg-brand-400/5 rounded-full blur-[120px] pointer-events-none">
   </div>
-  <div class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-taupe-50/30 dark:bg-[#1A1314]/30 rounded-full blur-[120px] pointer-events-none">
+  <div
+    class="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-600/5 dark:bg-brand-400/5 rounded-full blur-[120px] pointer-events-none">
   </div>
 
-  <div class="w-full max-w-[480px] relative z-10">
+  <div class="w-full max-w-[500px] relative z-10">
     <!-- Breadcrumb -->
-    <div class="mb-6 ml-4">
+    <div class="mb-8">
       <a [routerLink]="['/dashboard']"
-        class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-taupe-400 hover:text-taupe-600 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor" stroke-width="3">
+        class="inline-flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-brand-400 hover:text-brand-500 transition-all group">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform"
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        Return to Dashboard
+        Return to Protocol
       </a>
     </div>
 
+    <!-- Main Card -->
     <div
-      class="bg-white dark:bg-[#1A1314] rounded-[2.5rem] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.04)] border border-white dark:border-taupe-800 p-8 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] transition-all duration-500">
-      <!-- Clean Header -->
-      <div class="text-center mb-8">
+      class="bg-white dark:bg-brand-800 rounded-[3rem] shadow-[0_32px_84px_-16px_rgba(2,6,23,0.08)] dark:shadow-[0_32px_84px_-16px_rgba(0,0,0,0.4)] border border-brand-100 dark:border-brand-700/50 p-10 sm:p-12 overflow-hidden relative">
+
+      <!-- Top Accent Bar -->
+      <div
+        class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-600 to-brand-400 group-hover:h-2 transition-all">
+      </div>
+
+      <!-- Header -->
+      <div class="flex flex-col items-center mb-10">
         <div
-          class="w-14 h-14 bg-taupe-50 dark:bg-[#1A1314] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner border border-taupe-50 dark:border-taupe-800">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-taupe-600 dark:text-taupe-400" fill="none" viewBox="0 0 24 24"
+          class="w-16 h-16 bg-brand-50 dark:bg-brand-900/50 rounded-2xl flex items-center justify-center mb-6 shadow-inner border border-brand-100 dark:border-brand-700/50 group">
+          <svg xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8 text-brand-500 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24"
             stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <span class="text-[10px] font-bold text-taupe-600 dark:text-taupe-400 uppercase tracking-widest mb-2 block">Claim Support</span>
-        <h1 class="text-3xl font-extrabold text-[#0f172a] dark:text-white tracking-tight mb-2">File a <span
-            class="text-taupe-600 dark:text-taupe-400">Claim</span></h1>
+        <span class="text-[10px] font-black text-brand-500 uppercase tracking-[0.4em] mb-2 block text-center">Protocol
+          Protection</span>
+        <h1 class="text-3xl font-black text-brand-900 dark:text-white tracking-tight text-center leading-none">File a
+          <span class="italic text-brand-500">Claim</span>
+        </h1>
       </div>
 
+      <!-- Compact Policy Info -->
       <div
-        class="grid grid-cols-2 gap-4 p-5 bg-taupe-50 dark:bg-[#1A1314] rounded-2xl border border-taupe-100 dark:border-taupe-800 mb-6 overflow-hidden relative">
-        <div class="absolute inset-0 bg-gradient-to-r from-taupe-600/5 to-transparent pointer-events-none"></div>
-        <div class="relative z-10">
-          <p class="text-[9px] font-bold text-taupe-400 uppercase tracking-widest mb-1 italic">Your Policy</p>
-          <p class="text-xs font-bold text-taupe-900 dark:text-white uppercase tracking-tight">{{ policy()?.planName }}</p>
+        class="mb-10 p-5 bg-brand-50 dark:bg-brand-900/30 rounded-2xl border border-brand-100 dark:border-brand-700/50 flex justify-between items-center group">
+        <div>
+          <p class="text-[9px] font-black text-brand-400 uppercase tracking-widest leading-none mb-1.5">Asset Protocol
+          </p>
+          <p class="text-xs font-black text-brand-900 dark:text-brand-100 uppercase tracking-tight">{{
+            policy()?.planName || 'LOADING...' }}</p>
         </div>
-        <div class="relative z-10 text-right">
-          <p class="text-[10px] font-bold text-taupe-400 uppercase tracking-widest mb-1 italic">Current Coverage</p>
-          <p class="text-xs font-bold text-taupe-600 dark:text-taupe-400 tracking-tighter">{{ policy()?.remainingCoverageAmount |
-            currency:'INR':'symbol':'1.0-0' }}</p>
+        <div class="text-right">
+          <p class="text-[9px] font-black text-brand-400 uppercase tracking-widest leading-none mb-1.5">Coverage Cap</p>
+          <p class="text-sm font-black text-brand-500 dark:text-brand-400 tracking-tighter">{{
+            (policy()?.remainingCoverageAmount || 0) | currency:'INR':'symbol':'1.0-0' }}</p>
         </div>
       </div>
 
-      <!-- Form -->
-      <form (ngSubmit)="onSubmit()" #claimForm="ngForm" class="space-y-5">
-        <!-- Description -->
-        <div class="space-y-2">
-          <label class="input-label">Incident Details</label>
+      <!-- Main Submission Form -->
+      <form (ngSubmit)="onSubmit()" #claimForm="ngForm" class="space-y-8">
+
+        <!-- Incident Evidence -->
+        <div class="space-y-2.5">
+          <label class="block text-[10px] font-black text-brand-400 uppercase tracking-[0.2em] px-1">Incident
+            Manifest</label>
           <textarea name="description" [(ngModel)]="claimData.description" required #desc="ngModel" rows="3"
-            placeholder="Describe what happened, including dates and impact..."
-            class="input-field !h-auto py-4"></textarea>
+            placeholder="Describe the incident lifecycle, timeline, and security breach..."
+            class="w-full bg-white dark:bg-brand-950 border border-brand-200 dark:border-brand-700 rounded-2xl px-6 py-4 text-[15px] font-medium outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition-all outline-none resize-none"></textarea>
           <div *ngIf="desc.invalid && desc.touched"
-            class="text-rose-500 text-[9px] font-bold uppercase tracking-widest mt-1 ml-2">Description required</div>
+            class="text-[9px] font-black text-rose-500 uppercase tracking-widest mt-1 px-1 flex items-center gap-1.5">
+            <span class="w-1 h-1 rounded-full bg-rose-500"></span> manifest details required
+          </div>
         </div>
 
-        <!-- Claim Amount -->
-        <div class="space-y-2">
-          <label class="input-label">Claim Amount (₹)</label>
+        <!-- Valuation -->
+        <div class="space-y-2.5">
+          <label class="block text-[10px] font-black text-brand-400 uppercase tracking-[0.2em] px-1 text-center">Claim
+            Amount (₹)</label>
           <div class="relative group/input">
             <input type="number" name="amount" [(ngModel)]="claimData.claimAmount" required #amt="ngModel" min="1"
-              [max]="policy()?.remainingCoverageAmount || 0" class="input-field pl-14 text-xl font-bold tracking-tight"
-              placeholder="0.00">
+              [max]="policy()?.remainingCoverageAmount || 0"
+              class="w-full h-20 bg-white dark:bg-brand-950 border border-brand-200 dark:border-brand-700 rounded-2xl px-6 pl-20 text-3xl font-black text-brand-900 dark:text-white outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition-all text-center tracking-tighter"
+              placeholder="0">
             <span
-              class="absolute left-6 top-1/2 -translate-y-1/2 text-taupe-300 font-bold text-lg group-focus-within/input:text-taupe-600 transition-colors duration-300">₹</span>
-          </div>
-          <div *ngIf="amt.invalid && amt.touched"
-            class="text-rose-500 text-[9px] font-bold uppercase tracking-widest mt-1 ml-2">Amount required
+              class="absolute left-8 top-1/2 -translate-y-1/2 text-brand-200 font-black text-2xl group-focus-within/input:text-brand-500 transition-colors">₹</span>
           </div>
 
+          <!-- Validation Alerts -->
+          <div *ngIf="amt.invalid && amt.touched"
+            class="text-[9px] font-black text-rose-500 uppercase tracking-widest mt-1 text-center font-bold">
+            Protocol Error &middot; Valid Amount Required
+          </div>
           <div *ngIf="claimData.claimAmount > (policy()?.remainingCoverageAmount || 0)"
-            class="mt-4 p-4 bg-rose-50 border border-rose-100 rounded-2xl">
-            <div class="flex items-center gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-600" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="3">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-              </svg>
-              <span class="text-[9px] font-bold text-rose-700 uppercase tracking-widest italic">Amount exceeds
-                coverage</span>
-            </div>
+            class="mt-4 p-4 bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/30 rounded-2xl flex items-center justify-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></div>
+            <span
+              class="text-[10px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-widest italic">Authorization
+              Fault: Amount Exceeds Coverage</span>
           </div>
         </div>
 
-        <!-- Supporting Documents -->
-        <div class="space-y-2">
-          <label class="input-label">Supporting Documents</label>
+        <!-- Document Upload Portal -->
+        <div class="space-y-3">
+          <label
+            class="block text-[10px] font-black text-[#b49b8a] dark:text-brand-400 uppercase tracking-[0.2em] px-1">Supporting
+            Documents</label>
+
+          <!-- Upload Area -->
           <div
-            class="group relative border-2 border-dashed border-taupe-100 dark:border-taupe-800 rounded-2xl text-center bg-taupe-50/30 dark:bg-[#1A1314]/30 hover:bg-white hover:border-taupe-200 transition-all duration-500 cursor-pointer overflow-hidden"
+            class="group relative border-2 border-dashed border-brand-100 dark:border-brand-700 rounded-3xl text-center bg-brand-50/20 dark:bg-brand-900/10 hover:bg-white dark:hover:bg-brand-950 hover:border-brand-500/50 transition-all duration-500 cursor-pointer overflow-hidden p-8"
             (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
-            [class.border-taupe-600]="isDragging" [class.bg-taupe-50/20]="isDragging">
+            [class.border-brand-500]="isDragging" [class.bg-brand-50/50]="isDragging">
 
             <input type="file" multiple (change)="onFileSelect($event)"
               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
 
-            <div class="py-6 relative z-10 transition-transform group-hover:scale-105 duration-500">
+            <div
+              class="relative z-10 transition-transform group-hover:scale-105 duration-500 flex flex-col items-center">
               <div
-                class="mx-auto w-10 h-10 bg-white dark:bg-[#1A1314] border border-taupe-50 dark:border-taupe-800 rounded-xl flex items-center justify-center text-taupe-300 mb-2 group-hover:bg-[#0f172a] group-hover:text-white transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2.5">
+                class="w-12 h-12 bg-white dark:bg-brand-900 rounded-2xl flex items-center justify-center text-brand-200 mb-4 shadow-sm border border-brand-100 dark:border-brand-700 group-hover:bg-brand-500 group-hover:text-white transition-all transform group-hover:rotate-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="3">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
               </div>
-              <p class="text-taupe-900 dark:text-white font-bold text-[10px] uppercase tracking-widest leading-none mb-1">Add Documents
-              </p>
-              <p class="text-[8px] text-taupe-400 font-medium uppercase tracking-widest italic opacity-60">Upload photos
+              <p
+                class="text-brand-900 dark:text-brand-100 font-black text-sm uppercase tracking-[0.2em] leading-none mb-2">
+                Add Documents</p>
+              <p class="text-[9px] text-brand-400 font-black uppercase tracking-[0.3em] italic opacity-60">Upload Photos
                 or PDFs</p>
             </div>
           </div>
 
-          <div *ngIf="selectedFiles.length > 0" class="mt-4 space-y-2">
+          <!-- Document List -->
+          <div *ngIf="selectedFiles.length > 0"
+            class="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
             <div *ngFor="let file of selectedFiles; let i = index"
-              class="flex justify-between items-center bg-taupe-50 dark:bg-[#1A1314] border border-taupe-100 dark:border-taupe-800 p-3 rounded-xl">
-              <div class="flex items-center gap-3 overflow-hidden">
+              class="flex justify-between items-center bg-white dark:bg-brand-900/50 border border-brand-100 dark:border-brand-700 rounded-2xl p-4 shadow-sm group/item">
+              <div class="flex items-center gap-4 overflow-hidden">
                 <div
-                  class="w-8 h-8 rounded-lg bg-white dark:bg-[#1A1314] flex items-center justify-center text-taupe-400 shrink-0 border border-taupe-50 dark:border-taupe-800">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/50 flex items-center justify-center text-brand-400 shrink-0 border border-brand-100 dark:border-brand-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <span class="text-[10px] font-bold text-taupe-900 dark:text-white truncate uppercase tracking-tight">{{ file.name
-                  }}</span>
+                <span
+                  class="text-xs font-black text-brand-900 dark:text-brand-100 uppercase tracking-widest truncate">{{
+                  file.name }}</span>
               </div>
               <button type="button" (click)="removeFile(i)"
-                class="text-taupe-300 hover:text-rose-500 transition-colors p-1 shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd" />
+                class="text-brand-200 hover:text-rose-500 transition-all p-2 group-hover/item:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
           </div>
         </div>
 
-        <div *ngIf="submitError()" class="p-4 bg-rose-50 border border-rose-100 rounded-2xl">
-          <div class="flex items-center gap-3 text-rose-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clip-rule="evenodd" />
-            </svg>
-            <span class="text-[10px] font-bold uppercase tracking-widest italic">{{ submitError() }}</span>
+        <!-- Network Error Alerts -->
+        <div *ngIf="submitError()"
+          class="p-6 bg-[#fff1f2] dark:bg-rose-950/20 border border-[#ffe4e6] dark:border-rose-900/30 rounded-3xl animate-in shake duration-500">
+          <div class="flex items-center gap-4 text-[#be123c] dark:text-rose-400">
+            <div
+              class="w-8 h-8 bg-white dark:bg-rose-900/30 rounded-full flex items-center justify-center shrink-0 shadow-sm border border-[#ffe4e6] dark:border-rose-800">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="text-[11px] font-black uppercase tracking-[0.15em] italic leading-tight">{{ submitError()
+              }}</span>
           </div>
         </div>
 
-        <div class="pt-4">
+        <!-- Authorization Actions -->
+        <div class="pt-6">
           <button type="submit"
-            [disabled]="claimForm.invalid || loading() || claimData.claimAmount > (policy()?.remainingCoverageAmount || 0)"
-            class="btn-primary w-full py-5">
-            <span *ngIf="!loading()" class="relative flex items-center justify-center gap-4">
+            [disabled]="loading() || claimForm.invalid || claimData.claimAmount > (policy()?.remainingCoverageAmount || 0)"
+            class="w-full h-16 bg-brand-500 dark:bg-brand-500 hover:brightness-110 disabled:opacity-40 disabled:grayscale text-white rounded-2xl font-black uppercase tracking-[0.3em] text-xs transition-all shadow-xl shadow-brand-500/20 active:scale-95 flex items-center justify-center gap-4 group/btn relative overflow-hidden">
+
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2s_infinite]">
+            </div>
+
+            <span *ngIf="!loading()" class="relative flex items-center gap-4">
               Submit Claim
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2.5">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 transform group-hover/btn:translate-x-2 transition-transform" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </span>
-            <span *ngIf="loading()" class="relative flex items-center justify-center gap-4 animate-pulse">
-              Sending Claim...
+            <span *ngIf="loading()" class="relative flex items-center gap-3">
+              <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              Authenticating Protocol...
             </span>
           </button>
 
-          <p
-            class="text-center mt-4 text-[9px] font-bold text-taupe-300 uppercase tracking-widest italic flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-2.5 h-2.5">
-              <path fill-rule="evenodd"
-                d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z"
-                clip-rule="evenodd" />
-            </svg>
-            Securely Processed
-          </p>
+          <!-- Secure Footer -->
+          <div class="mt-8 flex flex-col items-center">
+            <div
+              class="flex items-center gap-2 text-[10px] font-black text-brand-300 dark:text-brand-500 uppercase tracking-[0.4em] italic mb-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                <path fill-rule="evenodd"
+                  d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z"
+                  clip-rule="evenodd" />
+              </svg>
+              Securely Processed
+            </div>
+            <p class="text-[8px] font-bold text-brand-200 dark:text-brand-600 uppercase tracking-widest leading-none">
+              AES-256 BANK GRADE ENCRYPTION ACTIVE</p>
+          </div>
         </div>
       </form>
     </div>
   </div>
 </div>
-

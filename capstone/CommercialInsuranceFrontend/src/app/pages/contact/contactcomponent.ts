@@ -1,3 +1,4 @@
+﻿// Contact form page: captures visitor name, email, subject, and message, and submits an inquiry via SupportService.
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -16,7 +17,9 @@ export class Contact {
     private supportService = inject(SupportService);
     private router = inject(Router);
 
+    // State and data property: isSubmitting
     isSubmitting = signal(false);
+    // State and data property: showSuccess
     showSuccess = signal(false);
 
     contactForm = this.fb.group({
@@ -25,9 +28,11 @@ export class Contact {
         message: ['', [Validators.required, Validators.minLength(10)]]
     });
 
-    submitInquiry() {
+    // Processes form submission and persists changes for onSubmit
+    onSubmit() {
         if (this.contactForm.invalid) {
             this.contactForm.markAllAsTouched();
+            // State and data property: return
             return;
         }
         if (this.isSubmitting()) return;
@@ -55,4 +60,3 @@ export class Contact {
         });
     }
 }
-

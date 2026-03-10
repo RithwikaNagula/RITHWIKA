@@ -1,4 +1,4 @@
-// Component that provides administrators with data visualizations and statistical insights regarding platform usage and financials.
+﻿// Displays system analytics charts: policy trends, claim resolution stats, premium revenue, and user growth pulled from AnalyticsService.
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -23,19 +23,33 @@ import { AnalyticsService, ClaimsAnalyticsDto, RevenueAnalyticsDto } from '../..
 import { forkJoin } from 'rxjs';
 
 export type ChartOptions = {
+    // State and data property: series
     series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+    // State and data property: chart
     chart: ApexChart;
+    // State and data property: xaxis
     xaxis: ApexXAxis;
+    // State and data property: yaxis
     yaxis: ApexYAxis;
+    // State and data property: dataLabels
     dataLabels: ApexDataLabels;
+    // State and data property: plotOptions
     plotOptions: ApexPlotOptions;
+    // State and data property: title
     title: ApexTitleSubtitle;
+    // State and data property: labels
     labels: string[];
+    // State and data property: legend
     legend: ApexLegend;
+    // State and data property: colors
     colors: string[];
+    // State and data property: stroke
     stroke: ApexStroke;
+    // State and data property: fill
     fill: ApexFill;
+    // State and data property: tooltip
     tooltip: ApexTooltip;
+    // State and data property: grid
     grid: ApexGrid;
 };
 
@@ -50,8 +64,11 @@ export class AdminAnalyticsComponent implements OnInit {
     private adminService = inject(AdminService);
     private analyticsService = inject(AnalyticsService);
 
+    // State and data property: stats
     stats = signal<AdminDashboardDto | null>(null);
+    // State and data property: loading
     loading = signal(true);
+    // State and data property: error
     error = signal('');
 
     // Revenue Toggle
@@ -59,16 +76,22 @@ export class AdminAnalyticsComponent implements OnInit {
 
     // Chart Data
     agentRadialOptions: Partial<ChartOptions> | null = null;
+    // State and data property: claimsDonutOptions
     claimsDonutOptions: Partial<ChartOptions> | null = null;
+    // State and data property: settlementsAreaOptions
     settlementsAreaOptions: Partial<ChartOptions> | null = null;
+    // State and data property: revenueAreaOptions
     revenueAreaOptions: Partial<ChartOptions> | null = null;
 
+    // State and data property: revenueData
     revenueData = signal<RevenueAnalyticsDto | null>(null);
+    // Lifecycle hook: Initialization phase where initial data is loaded from services
 
     ngOnInit() {
         this.loadDashboardData();
     }
 
+    // Retrieves and populates required data for loadDashboardData
     loadDashboardData() {
         this.loading.set(true);
 
@@ -94,6 +117,7 @@ export class AdminAnalyticsComponent implements OnInit {
         });
     }
 
+    // Toggles visibility or state flag for toggleRevenuePeriod
     toggleRevenuePeriod(period: 'monthly' | 'yearly') {
         this.revenuePeriod.set(period);
         this.analyticsService.getRevenueAnalytics(period).subscribe({
@@ -104,7 +128,7 @@ export class AdminAnalyticsComponent implements OnInit {
         });
     }
 
-    // ── Radial Bar: Agent Acquisition Force ────────────────────────────────
+    //  Radial Bar: Agent Acquisition Force 
     private buildAgentRadialChart(data: any[]) {
         if (!data || data.length === 0) return;
 
@@ -124,7 +148,7 @@ export class AdminAnalyticsComponent implements OnInit {
                 toolbar: { show: false }
             },
             labels: names,
-            colors: ['#907E80', '#A89799', '#BEB4B6', '#6B5E60', '#CCC3C5'],
+            colors: ['#734d61', '#8c667a', '#a68094', '#4d3340', '#ccb3c0'],
             plotOptions: {
                 radialBar: {
                     offsetY: 0,
@@ -136,7 +160,7 @@ export class AdminAnalyticsComponent implements OnInit {
                         background: 'transparent'
                     },
                     track: {
-                        background: '#F0ECEC',
+                        background: '#f8f4f6',
                         strokeWidth: '97%',
                         margin: 5
                     },
@@ -181,7 +205,7 @@ export class AdminAnalyticsComponent implements OnInit {
         } as any;
     }
 
-    // ── Donut + Area: Claims Performance ───────────────────────────────────
+    //  Donut + Area: Claims Performance 
     private buildClaimsCharts(data: ClaimsAnalyticsDto) {
         if (!data) return;
 
@@ -195,7 +219,7 @@ export class AdminAnalyticsComponent implements OnInit {
                 fontFamily: 'DM Sans, sans-serif'
             },
             labels: ['Approved / Settled', 'Pending / Rejected'],
-            colors: ['#907E80', '#E1DADB'],
+            colors: ['#734d61', '#f8f4f6'],
             legend: {
                 position: 'bottom',
                 fontSize: '11px',
@@ -255,7 +279,7 @@ export class AdminAnalyticsComponent implements OnInit {
                 toolbar: { show: false },
                 sparkline: { enabled: false }
             },
-            colors: ['#907E80'],
+            colors: ['#734d61'],
             stroke: { curve: 'smooth', width: 2.5 },
             fill: {
                 type: 'gradient',
@@ -302,7 +326,7 @@ export class AdminAnalyticsComponent implements OnInit {
         } as any;
     }
 
-    // ── Area: Revenue Trend ─────────────────────────────────────────────────
+    //  Area: Revenue Trend 
     private buildRevenueChart(data: RevenueAnalyticsDto) {
         if (!data || !data.revenueTrend) return;
 
@@ -343,7 +367,7 @@ export class AdminAnalyticsComponent implements OnInit {
                     }
                 }
             },
-            colors: ['#907E80'],
+            colors: ['#5c3d4e'],
             fill: {
                 type: 'gradient',
                 gradient: {

@@ -1,281 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   INSUREDESK — Global Design System
-   Primary Brand Color: #907E80 (taupe-600) — Dusty Mauve
-   Typography: DM Serif Display (headings) + DM Sans (body)
-   Mode: Light + Dark (class-based via Tailwind)
-═══════════════════════════════════════════════════════════════════════════ */
-
 @layer base {
 
-    /* ── Root: eliminates background bleed-through in dark mode ────────────── */
-    html {
-        background-color: #FAF8F8;
-        scroll-behavior: smooth;
-    }
-
-    html.dark {
-        background-color: #140E0F;
-    }
-
-    /* ── Body ──────────────────────────────────────────────────────────────── */
+    /* Global Background & Typography */
+    html,
     body {
-        @apply bg-taupe-50 dark:bg-[#140E0F] text-taupe-800 dark:text-taupe-200 antialiased font-sans transition-colors duration-300;
-        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-        font-optical-sizing: auto;
-        letter-spacing: -0.01em;
+        @apply bg-brand-50 text-brand-800 antialiased font-sans transition-colors duration-500;
+        scroll-behavior: smooth;
+        font-family: 'Inter', system-ui, sans-serif;
     }
 
-    /* ── Headings — DM Serif Display for elegant gravitas ──────────────────── */
+    /* Force dark mode background to a deep brand-900 */
+    .dark html,
+    .dark body {
+        @apply bg-brand-900 text-brand-100;
+    }
+
     h1,
     h2,
-    h3 {
-        font-family: 'DM Serif Display', Georgia, serif;
-        @apply text-taupe-900 dark:text-white transition-colors duration-300;
-        letter-spacing: -0.01em;
-        font-weight: 400;
-        /* DM Serif Display is naturally bold without heavy weight */
-    }
-
+    h3,
     h4,
     h5,
     h6 {
-        @apply font-sans font-semibold text-taupe-800 dark:text-taupe-100 tracking-tight transition-colors duration-300;
+        @apply font-bold text-brand-900 dark:text-white tracking-tight transition-colors duration-300;
+        font-family: 'Outfit', sans-serif;
     }
 
-    /* ── Links ──────────────────────────────────────────────────────────────── */
-    a {
-        @apply text-taupe-600 dark:text-taupe-400 transition-colors duration-200 hover:text-taupe-800 dark:hover:text-taupe-200;
-    }
-
-    /* ── Smooth scrollbar ───────────────────────────────────────────────────── */
-    ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-        @apply bg-taupe-100 dark:bg-[#1C1517];
-    }
-
-    ::-webkit-scrollbar-thumb {
-        @apply bg-taupe-300 dark:bg-taupe-700 rounded-full;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        @apply bg-taupe-400 dark:bg-taupe-600;
-    }
-
-    /* ── Selection ──────────────────────────────────────────────────────────── */
+    /* Selection */
     ::selection {
-        background-color: rgba(144, 126, 128, 0.2);
+        background-color: theme('colors.brand.500');
+        color: white;
     }
 
-    /* ── Focus ring ─────────────────────────────────────────────────────────── */
+    /* Focus Ring */
     :focus-visible {
-        outline: 2px solid #907E80;
-        outline-offset: 2px;
-        border-radius: 6px;
+        @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white dark:ring-offset-brand-900;
     }
 }
 
 @layer components {
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       BUTTONS
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    /* Primary — brand dusty mauve #907E80 */
-    .btn-primary {
-        @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-taupe-600 text-white px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-200 hover:bg-taupe-700 hover:-translate-y-px active:scale-[0.98] active:translate-y-0 disabled:opacity-40 disabled:pointer-events-none;
-        box-shadow: 0 2px 8px rgba(144, 126, 128, 0.20),
-            0 8px 24px -4px rgba(144, 126, 128, 0.30);
+    /* Premium Cards - Using pure Tailwind utility mapping to avoid overriding specific inline classes */
+    .card,
+    table {
+        @apply bg-white dark:bg-brand-800 border-brand-100 dark:border-brand-700/50 rounded-3xl shadow-premium dark:shadow-2xl transition-all duration-300;
+        border-width: 1px;
     }
 
-    .btn-primary:hover {
-        box-shadow: 0 4px 12px rgba(144, 126, 128, 0.25),
-            0 16px 32px -6px rgba(144, 126, 128, 0.35);
+    /* Form Fields - Clean white inputs by default in light mode */
+    .input-field,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select {
+        @apply w-full h-14 rounded-2xl px-6 text-[15px] font-medium transition-all duration-300 outline-none;
+        @apply bg-white dark:bg-brand-950 border border-brand-200 dark:border-brand-700 text-brand-900 dark:text-white shadow-sm;
     }
 
-    /* Outline */
-    .btn-outline {
-        @apply inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-taupe-300 dark:border-taupe-700 bg-transparent text-taupe-700 dark:text-taupe-300 px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-200 hover:bg-taupe-100 dark:hover:bg-taupe-800/40 hover:border-taupe-400 dark:hover:border-taupe-600 hover:text-taupe-900 dark:hover:text-taupe-100 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none;
-    }
-
-    /* Ghost */
-    .btn-ghost {
-        @apply inline-flex items-center justify-center gap-2 rounded-xl text-taupe-600 dark:text-taupe-400 px-4 py-2.5 text-[11px] font-semibold transition-all duration-200 hover:bg-taupe-100 dark:hover:bg-taupe-800/50 hover:text-taupe-800 dark:hover:text-taupe-200 active:scale-[0.98];
-    }
-
-    /* Destructive / danger */
-    .btn-danger {
-        @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-rose-600 text-white px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-200 hover:bg-rose-700 hover:-translate-y-px active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none;
-        box-shadow: 0 8px 24px -4px rgba(220, 38, 38, 0.30);
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       CARDS
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    /* Base card */
-    .card {
-        @apply rounded-3xl border border-taupe-200 dark:border-[#2E2122] bg-white dark:bg-[#1C1517] transition-all duration-300;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
-            0 4px 16px -2px rgba(144, 126, 128, 0.08);
-    }
-
-    .card:hover {
-        @apply -translate-y-1 border-taupe-300 dark:border-taupe-700;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04),
-            0 12px 32px -4px rgba(144, 126, 128, 0.16);
-    }
-
-    /* Enterprise card — larger radius, richer shadow */
-    .card-enterprise {
-        @apply rounded-[2rem] border border-taupe-200/80 dark:border-[#2E2122] bg-white dark:bg-[#1C1517] transition-all duration-500 overflow-hidden;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03),
-            0 8px 32px -4px rgba(144, 126, 128, 0.12);
-    }
-
-    .card-enterprise:hover {
-        @apply -translate-y-1.5 border-taupe-300 dark:border-taupe-700;
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.05),
-            0 24px 56px -8px rgba(144, 126, 128, 0.22);
-    }
-
-    /* Premium card — hero cards with gradient border */
-    .premium-card {
-        @apply rounded-[2rem] relative bg-white dark:bg-[#1C1517] border border-taupe-200 dark:border-[#2E2122] transition-all duration-500 overflow-hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
-            0 8px 32px -4px rgba(144, 126, 128, 0.10);
-    }
-
-    .premium-card:hover {
-        @apply -translate-y-2 border-taupe-300 dark:border-taupe-700;
-        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.06),
-            0 32px 64px -16px rgba(144, 126, 128, 0.24);
-    }
-
-    /* Stat / metric card */
-    .stat-card {
-        @apply rounded-2xl border border-taupe-200 dark:border-[#2E2122] bg-white dark:bg-[#1C1517] p-6 transition-all duration-300;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
-            0 4px 12px -2px rgba(144, 126, 128, 0.08);
-    }
-
-    /* Glass card */
-    .glass-card {
-        @apply bg-white/70 dark:bg-[#1C1517]/80 backdrop-blur-xl border border-taupe-200/60 dark:border-[#2E2122]/60 rounded-2xl;
-        box-shadow: 0 4px 24px -4px rgba(144, 126, 128, 0.12);
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       FORM ELEMENTS
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    .input-field {
-        @apply w-full px-4 py-3.5 bg-taupe-50 dark:bg-[#1C1517] border border-taupe-200 dark:border-[#2E2122] rounded-xl text-taupe-900 dark:text-taupe-100 placeholder-taupe-300 dark:placeholder-taupe-600 text-sm font-medium font-sans outline-none focus:bg-white dark:focus:bg-[#221A1B] focus:border-taupe-400 dark:focus:border-taupe-600 transition-all duration-200;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
-    }
-
-    .input-field:focus {
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02),
-            0 0 0 3px rgba(144, 126, 128, 0.12);
+    .input-field:focus,
+    input:focus,
+    select:focus {
+        @apply border-brand-500 ring-4 ring-brand-500/10 bg-white dark:bg-brand-900 shadow-md;
     }
 
     .input-label {
-        @apply block text-[10px] font-bold font-sans text-taupe-500 dark:text-taupe-400 uppercase tracking-[0.15em] mb-2;
+        @apply block text-[11px] font-black uppercase tracking-[0.2em] mb-2 px-1 text-brand-500 dark:text-brand-400;
     }
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       BADGES & PILLS
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    .premium-badge {
-        @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-taupe-100 dark:bg-taupe-800/60 text-taupe-700 dark:text-taupe-300 rounded-full text-[9px] font-bold font-sans uppercase tracking-widest border border-taupe-200 dark:border-taupe-700;
+    /* Primary Action Buttons - The charcoal-burgundy requested */
+    .btn-primary,
+    button[type="submit"] {
+        @apply inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black uppercase tracking-[0.15em] text-[12px] transition-all disabled:opacity-50 disabled:grayscale;
+        @apply bg-brand-500 dark:bg-brand-500 text-white hover:brightness-110 active:scale-95 shadow-xl shadow-brand-500/20 dark:shadow-brand-400/10;
     }
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       STATUS CHIPS
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    .status-active {
-        @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 text-[9px] font-bold font-sans uppercase tracking-wider;
+    /* Inner Shaded Regions - very subtle, never blocky */
+    .inner-shade {
+        @apply bg-brand-100/30 dark:bg-brand-950/20 border border-brand-200/50 dark:border-brand-800/30 rounded-2xl;
     }
 
-    .status-pending {
-        @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 text-[9px] font-bold font-sans uppercase tracking-wider;
+    /* Sidebar Items */
+    .sidebar-item {
+        @apply flex items-center gap-3 px-6 py-4 transition-all rounded-xl text-sm font-semibold;
+        @apply text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 hover:text-brand-900 dark:hover:text-white;
     }
 
-    .status-expired {
-        @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800/50 text-[9px] font-bold font-sans uppercase tracking-wider;
-    }
-
-    .status-settled {
-        @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-taupe-100 dark:bg-taupe-800/60 text-taupe-600 dark:text-taupe-400 border border-taupe-200 dark:border-taupe-700 text-[9px] font-bold font-sans uppercase tracking-wider;
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       PAGE / SECTION WRAPPERS
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    .page-section {
-        @apply py-20 px-4 sm:px-6 lg:px-8 bg-taupe-50 dark:bg-[#140E0F] transition-colors duration-300;
-    }
-
-    .section-alt {
-        @apply bg-taupe-100/60 dark:bg-[#1C1517];
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TYPOGRAPHY UTILITIES
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    /* Display heading — DM Serif Display */
-    .heading-display {
-        font-family: 'DM Serif Display', Georgia, serif;
-        @apply text-taupe-900 dark:text-white;
-        font-weight: 400;
-    }
-
-    /* Section label — small caps uppercase */
-    .label-section {
-        @apply text-[10px] font-bold font-sans uppercase tracking-[0.3em] text-taupe-500 dark:text-taupe-400 block mb-3;
-    }
-
-    /* Overline divider */
-    .overline-divider {
-        @apply w-8 h-0.5 bg-taupe-600 dark:bg-taupe-500 rounded-full mb-4;
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TABLE STYLES
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    .table-header {
-        @apply text-[9px] font-bold font-sans uppercase tracking-[0.2em] text-taupe-400 dark:text-taupe-500;
-    }
-
-    .table-row {
-        @apply border-b border-taupe-100 dark:border-[#2E2122] hover:bg-taupe-50/60 dark:hover:bg-[#1C1517]/60 transition-colors duration-200;
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       DECORATIVE GLOW BLOB
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    .bg-glow {
-        @apply absolute w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none opacity-40;
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       BRAND ACCENT LINE
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-    .accent-bar {
-        @apply inline-block w-1 h-5 rounded-full bg-taupe-600 dark:bg-taupe-500;
+    .sidebar-item-active {
+        @apply bg-brand-500 dark:bg-brand-400/10 text-white dark:text-brand-400 shadow-lg shadow-brand-500/20 dark:shadow-brand-400/10 border border-transparent dark:border-brand-400/20;
     }
 }

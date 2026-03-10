@@ -1,4 +1,4 @@
-// Component that displays and manages the upcoming payment schedule and installments for a user's policy.
+﻿// Shows a payment schedule table (due dates, instalment amounts) for an active policy fetched by policy ID.
 import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,7 +16,9 @@ export class PaymentScheduleComponent implements OnInit {
     private router = inject(Router);
     private paymentService = inject(PaymentService);
 
+// State and data property: schedule
     schedule = signal<PaymentScheduleDto | null>(null);
+// State and data property: loading
     loading = signal(true);
 
     paidCount = computed(() => {
@@ -29,6 +31,7 @@ export class PaymentScheduleComponent implements OnInit {
         if (!s || s.totalInstallments === 0) return 0;
         return (this.paidCount() / s.totalInstallments) * 100;
     });
+// Lifecycle hook: Initialization phase where initial data is loaded from services
 
     ngOnInit() {
         const policyId = this.route.snapshot.queryParams['policyId'] || this.route.snapshot.params['policyId'];
@@ -48,5 +51,4 @@ export class PaymentScheduleComponent implements OnInit {
         }
     }
 }
-
 

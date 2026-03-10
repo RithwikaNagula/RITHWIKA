@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// HTTP interceptor that catches 401/403 responses globally; on 401 it clears the session and redirects the user to the login page.
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';

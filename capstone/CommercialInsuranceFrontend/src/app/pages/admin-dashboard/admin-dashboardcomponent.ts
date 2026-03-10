@@ -1,4 +1,4 @@
-// Main unified dashboard for administrators, providing high-level metrics, system overviews, and navigation to specific management modules.
+﻿// Admin dashboard shell: renders the sidebar navigation and hosts the child router outlet for all admin sub-pages.
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
@@ -11,7 +11,6 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './admin-dashboardcomponent.html'
 })
 export class AdminDashboardComponent { }
-
 
 
 

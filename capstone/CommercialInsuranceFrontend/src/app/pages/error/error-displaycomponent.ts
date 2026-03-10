@@ -1,4 +1,4 @@
-// Fallback component designed to catch and display global system errors and connection failures gracefully to the user.
+﻿// Generic error display page shown when navigation reaches an unrecognized route or an API error is caught.
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -13,10 +13,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 export class ErrorDisplayComponent {
     private route = inject(ActivatedRoute);
 
+// State and data property: statusCode
     statusCode: string | null = null;
+// State and data property: errorMessage
     errorMessage: string | null = null;
+// State and data property: referenceId
     referenceId: string = Math.random().toString(36).substring(2, 10).toUpperCase();
 
+// Executes core logic for errorTitle
     get errorTitle(): string {
         switch (this.statusCode) {
             case '404': return 'Oops! Nothing Was Found';
@@ -25,10 +29,12 @@ export class ErrorDisplayComponent {
             case '500': return 'Internal Server Error';
             case '503': return 'Service Unavailable';
             case '0': return 'Connection Failed';
+// State and data property: default
             default: return 'Something Went Wrong';
         }
     }
 
+// Event listener hook triggered by errorDescription
     get errorDescription(): string {
         if (this.errorMessage) return this.errorMessage;
         switch (this.statusCode) {
@@ -38,9 +44,11 @@ export class ErrorDisplayComponent {
             case '500': return 'Our servers encountered an unexpected condition. Our team has been notified and is working on a fix.';
             case '503': return 'The service is temporarily offline for maintenance. Please try again in a few minutes.';
             case '0': return 'Unable to reach our servers. Please check your internet connection and try again.';
+// State and data property: default
             default: return 'An unexpected error occurred while processing your request. Please try again later.';
         }
     }
+// Lifecycle hook: Initialization phase where initial data is loaded from services
 
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
@@ -52,8 +60,8 @@ export class ErrorDisplayComponent {
         });
     }
 
+// Event listener hook triggered by onRetry
     onRetry() {
         window.history.back();
     }
 }
-

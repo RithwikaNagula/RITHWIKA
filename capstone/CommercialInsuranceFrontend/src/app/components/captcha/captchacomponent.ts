@@ -1,4 +1,4 @@
-// Custom canvas-based CAPTCHA component — generates a 6-char alphanumeric code
+﻿// Custom canvas-based CAPTCHA component — generates a 6-char alphanumeric code
 // with background noise, wavy lines, and per-character rotation. No external deps.
 import {
     Component, AfterViewInit, ViewChild, ElementRef,
@@ -60,8 +60,8 @@ export class CaptchaComponent implements AfterViewInit {
 
         // ── Background gradient ──────────────────────────────────────────────────
         const bg = ctx.createLinearGradient(0, 0, W, H);
-        bg.addColorStop(0, '#F4F1EC');
-        bg.addColorStop(1, '#E8E3DA');
+        bg.addColorStop(0, '#FFFFFF');
+        bg.addColorStop(1, '#FDF2F8'); // Extremely subtle pinkish tint
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, W, H);
 
@@ -110,10 +110,10 @@ export class CaptchaComponent implements AfterViewInit {
             ctx.rotate((Math.random() - 0.5) * 0.45);          // ±~13°
             ctx.font = `bold ${21 + ~~(Math.random() * 7)}px 'Plus Jakarta Sans', sans-serif`;
 
-            // Warm dark-brown palette per character
-            const rShade = 50 + ~~(Math.random() * 60);
-            const gShade = 35 + ~~(Math.random() * 45);
-            const bShade = 18 + ~~(Math.random() * 30);
+            // Plum-toned palette per character
+            const rShade = 60 + ~~(Math.random() * 40);
+            const gShade = 40 + ~~(Math.random() * 30);
+            const bShade = 60 + ~~(Math.random() * 40);
             ctx.fillStyle = `rgb(${rShade},${gShade},${bShade})`;
             ctx.fillText(this.code[i], 0, 0);
             ctx.restore();

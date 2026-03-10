@@ -1,40 +1,40 @@
 <nav
-    class="bg-white dark:bg-[#1C1517] border-b border-taupe-100 dark:border-[#2E2122] shadow-[0_1px_0_0_rgba(144,126,128,0.08)] sticky top-0 z-50 transition-colors duration-300">
+    class="bg-white dark:bg-brand-800 border-b border-brand-100 dark:border-brand-800 shadow-[0_1px_0_0_rgba(144,126,128,0.08)] sticky top-0 z-50 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <a routerLink="/"
                     class="flex-shrink-0 flex items-center gap-1 mr-12 transition-transform hover:scale-[1.02]">
-                    <span style="font-family: 'DM Serif Display', Georgia, serif;"
-                        class="text-xl text-taupe-900 dark:text-white">Insure</span>
-                    <span style="font-family: 'DM Serif Display', Georgia, serif;"
-                        class="text-xl text-taupe-500 dark:text-taupe-400">Desk</span>
+                    <span style="font-family: 'Inter', Georgia, serif;"
+                        class="text-xl text-brand-900 dark:text-white">Insure</span>
+                    <span style="font-family: 'Inter', Georgia, serif;"
+                        class="text-xl text-brand-500 dark:text-brand-400">Desk</span>
                 </a>
                 <div class="hidden sm:flex sm:space-x-1">
                     <a routerLink="/"
-                        routerLinkActive="text-taupe-600 dark:text-taupe-400 bg-taupe-50 dark:bg-[#1A1314]"
+                        routerLinkActive="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-800"
                         [routerLinkActiveOptions]="{exact: true}"
-                        class="text-taupe-600 dark:text-taupe-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50 dark:hover:bg-taupe-900/20 transition-all">
+                        class="text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-brand-900 dark:hover:text-white hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all">
                         Home
                     </a>
                     <a *ngIf="auth.isAdmin()" routerLink="/admin"
-                        routerLinkActive="text-taupe-600 dark:text-taupe-400 bg-taupe-50 dark:bg-[#1A1314]"
-                        class="text-taupe-600 dark:text-taupe-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50 dark:hover:bg-taupe-900/20 transition-all">
+                        routerLinkActive="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-800"
+                        class="text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-brand-900 dark:hover:text-white hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all">
                         Admin Panel
                     </a>
                     <a *ngIf="auth.isAgent()" routerLink="/agent/dashboard"
-                        routerLinkActive="text-taupe-600 dark:text-taupe-400 bg-taupe-50 dark:bg-[#1A1314]"
-                        class="text-taupe-600 dark:text-taupe-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50 dark:hover:bg-taupe-900/20 transition-all">
+                        routerLinkActive="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-800"
+                        class="text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-brand-900 dark:hover:text-white hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all">
                         Agent Dashboard
                     </a>
                     <a *ngIf="auth.isCustomer()" routerLink="/dashboard"
-                        routerLinkActive="text-taupe-600 dark:text-taupe-400 bg-taupe-50 dark:bg-[#1A1314]"
-                        class="text-taupe-600 dark:text-taupe-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50 dark:hover:bg-taupe-900/20 transition-all">
+                        routerLinkActive="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-800/40"
+                        class="text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-brand-900 dark:hover:text-white hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all">
                         Dashboard
                     </a>
                     <a *ngIf="auth.isClaimsOfficer()" routerLink="/claims-officer/dashboard"
-                        routerLinkActive="text-taupe-600 dark:text-taupe-400 bg-taupe-50 dark:bg-[#1A1314]"
-                        class="text-taupe-600 dark:text-taupe-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-taupe-900 dark:hover:text-white hover:bg-taupe-50 dark:hover:bg-taupe-900/20 transition-all">
+                        routerLinkActive="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-800/40"
+                        class="text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-sm font-medium hover:text-brand-900 dark:hover:text-white hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all">
                         Claims Center
                     </a>
                 </div>
@@ -43,13 +43,13 @@
             <div class="hidden sm:flex sm:items-center sm:gap-4">
 
                 <!-- Dark Mode Toggle -->
-                <div class="border-r border-taupe-200 dark:border-taupe-800 pr-4 mr-1">
+                <div class="border-r border-brand-200 dark:border-brand-800 pr-4 mr-1">
                     <app-theme-toggle></app-theme-toggle>
                 </div>
 
                 <ng-container *ngIf="!auth.isAuthenticated()">
                     <a routerLink="/login"
-                        class="text-taupe-600 dark:text-taupe-400 hover:text-taupe-900 dark:hover:text-white px-4 py-2 text-sm font-medium transition-colors">
+                        class="text-brand-600 dark:text-brand-400 hover:text-brand-900 dark:hover:text-white px-4 py-2 text-sm font-medium transition-colors">
                         Login
                     </a>
                     <a routerLink="/register" class="btn-primary !py-2 !px-5 !text-xs uppercase tracking-wider">
@@ -61,51 +61,51 @@
                     <!-- Notification Bell -->
                     <div class="relative">
                         <button (click)="toggleNotifications()"
-                            class="relative w-9 h-9 flex items-center justify-center rounded-lg text-taupe-500 hover:text-taupe-600 dark:hover:text-taupe-400 hover:bg-taupe-50 dark:hover:bg-taupe-900/30 transition-colors">
+                            class="relative w-9 h-9 flex items-center justify-center rounded-lg text-brand-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                             <span *ngIf="notifService.unreadCount() > 0"
-                                class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-[#1C1517]">
+                                class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-500 rounded-full ring-2 ring-white dark:ring-brand-950">
                             </span>
                         </button>
 
                         <!-- Dropdown Panel -->
                         <div *ngIf="showNotifications"
-                            class="absolute right-0 mt-3 w-80 bg-white dark:bg-[#1C1517] rounded-2xl shadow-xl border border-taupe-100 dark:border-[#2E2122] overflow-hidden z-50">
+                            class="absolute right-0 mt-3 w-80 bg-white dark:bg-brand-800 rounded-2xl shadow-xl border border-brand-100 dark:border-brand-800 overflow-hidden z-50">
                             <!-- Header -->
                             <div
-                                class="px-5 py-4 border-b border-taupe-100 dark:border-taupe-800 flex items-center justify-between bg-taupe-50/50 dark:bg-[#1A1314]/50">
+                                class="px-5 py-4 border-b border-brand-100 dark:border-brand-800 flex items-center justify-between bg-brand-50/50 dark:bg-brand-800/50">
                                 <div>
-                                    <p class="font-bold text-taupe-900 dark:text-white text-sm">Notifications</p>
-                                    <p class="text-xs text-taupe-500 dark:text-taupe-400">{{ notifService.unreadCount()
+                                    <p class="font-bold text-brand-900 dark:text-white text-sm">Notifications</p>
+                                    <p class="text-xs text-brand-500 dark:text-brand-400">{{ notifService.unreadCount()
                                         }} unread</p>
                                 </div>
                                 <button *ngIf="notifService.unreadCount() > 0" (click)="markAllRead()"
-                                    class="text-xs font-semibold text-taupe-600 dark:text-taupe-400 hover:text-taupe-900 dark:hover:text-white px-3 py-1.5 rounded-lg hover:bg-taupe-50 dark:hover:bg-taupe-900/30 transition-colors">
+                                    class="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-900 dark:hover:text-white px-3 py-1.5 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors">
                                     Mark all read
                                 </button>
                             </div>
 
                             <!-- Notification List -->
-                            <div class="max-h-80 overflow-y-auto divide-y divide-taupe-50 dark:divide-taupe-900/50">
+                            <div class="max-h-80 overflow-y-auto divide-y divide-brand-50 dark:divide-brand-900/50">
                                 <ng-container *ngIf="notifService.notifications().length > 0; else emptyNotif">
                                     <div *ngFor="let n of notifService.notifications()" (click)="markRead(n)"
                                         class="flex items-start gap-3 px-5 py-4 cursor-pointer transition-colors"
-                                        [ngClass]="n.isRead ? 'bg-white dark:bg-[#1C1517] hover:bg-taupe-50 dark:hover:bg-taupe-900/20' : 'bg-taupe-50/30 dark:bg-taupe-900/10 hover:bg-taupe-50/50 dark:hover:bg-taupe-900/20'">
+                                        [ngClass]="n.isRead ? 'bg-white dark:bg-brand-800 hover:bg-brand-50 dark:hover:bg-brand-900/20' : 'bg-brand-50/30 dark:bg-brand-800/10 hover:bg-brand-50/50 dark:hover:bg-brand-900/20'">
                                         <div class="mt-1.5 w-2 h-2 rounded-full flex-shrink-0"
-                                            [ngClass]="n.isRead ? 'bg-taupe-200 dark:bg-taupe-800' : 'bg-taupe-500'">
+                                            [ngClass]="n.isRead ? 'bg-stone-200 dark:bg-brand-800' : 'bg-brand-500'">
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-semibold text-taupe-900 dark:text-white leading-snug"
+                                            <p class="text-sm font-semibold text-brand-900 dark:text-white leading-snug"
                                                 [class.opacity-50]="n.isRead">{{ n.title }}</p>
                                             <p
-                                                class="text-xs text-taupe-600 dark:text-taupe-400 mt-0.5 leading-relaxed line-clamp-2">
+                                                class="text-xs text-brand-600 dark:text-brand-400 mt-0.5 leading-relaxed line-clamp-2">
                                                 {{
                                                 n.message }}</p>
-                                            <p class="text-[10px] text-taupe-400 dark:text-taupe-500 mt-2">{{
+                                            <p class="text-[10px] text-brand-400 dark:text-brand-500 mt-2">{{
                                                 n.createdAt |
                                                 date:'MMM d, h:mm a' }}</p>
                                         </div>
@@ -114,17 +114,17 @@
                                 <ng-template #emptyNotif>
                                     <div class="py-12 text-center">
                                         <div
-                                            class="w-12 h-12 bg-taupe-50 dark:bg-[#1A1314] rounded-full flex items-center justify-center mx-auto mb-3">
+                                            class="w-12 h-12 bg-brand-50 dark:bg-brand-800 rounded-full flex items-center justify-center mx-auto mb-3">
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="h-6 w-6 text-taupe-300 dark:text-taupe-700" fill="none"
+                                                class="h-6 w-6 text-brand-300 dark:text-brand-700" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                             </svg>
                                         </div>
-                                        <p class="text-sm font-medium text-taupe-600 dark:text-taupe-400">All caught up!
+                                        <p class="text-sm font-medium text-brand-600 dark:text-brand-400">All caught up!
                                         </p>
-                                        <p class="text-xs text-taupe-400 dark:text-taupe-500 mt-1">No notifications yet.
+                                        <p class="text-xs text-brand-400 dark:text-brand-500 mt-1">No notifications yet.
                                         </p>
                                     </div>
                                 </ng-template>
@@ -134,22 +134,22 @@
 
                     <!-- User Avatar -->
                     <div
-                        class="flex items-center gap-3 px-3 py-1.5 bg-taupe-50 dark:bg-[#1A1314] rounded-lg border border-transparent dark:border-taupe-800">
+                        class="flex items-center gap-3 px-3 py-1.5 bg-brand-50 dark:bg-brand-800 rounded-lg border border-transparent dark:border-brand-800">
                         <div
-                            class="w-8 h-8 rounded-full bg-taupe-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">
+                            class="w-8 h-8 rounded-full bg-gray-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">
                             {{ auth.currentUser()?.fullName?.charAt(0) || 'U' }}
                         </div>
                         <div class="text-sm">
-                            <div class="font-semibold text-taupe-900 dark:text-white">{{ auth.currentUser()?.fullName }}
+                            <div class="font-semibold text-brand-900 dark:text-white">{{ auth.currentUser()?.fullName }}
                             </div>
                             <div
-                                class="text-[10px] font-bold text-taupe-400 dark:text-taupe-500 uppercase tracking-wider">
+                                class="text-[10px] font-bold text-brand-400 dark:text-brand-500 uppercase tracking-wider">
                                 {{
                                 auth.currentUser()?.role }}</div>
                         </div>
                     </div>
                     <button (click)="logout()"
-                        class="text-taupe-400 dark:text-taupe-500 hover:text-red-500 dark:hover:text-red-400 px-3 py-2 text-sm font-medium transition-colors">
+                        class="text-brand-400 dark:text-brand-500 hover:text-red-500 dark:hover:text-red-400 px-3 py-2 text-sm font-medium transition-colors">
                         Logout
                     </button>
                 </ng-container>
@@ -157,3 +157,4 @@
         </div>
     </div>
 </nav>
+

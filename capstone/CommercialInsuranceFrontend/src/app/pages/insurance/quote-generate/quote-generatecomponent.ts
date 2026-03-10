@@ -1,4 +1,4 @@
-// Interface for customers to input necessary business details dynamically and generate an estimated insurance quote.
+﻿// Quote generation form: customer selects coverage amount and payment frequency; calculates premium and submits a quote request.
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,27 +22,39 @@ export class QuoteGenerateComponent implements OnInit {
   private policyService = inject(PolicyService);
   private authService = inject(AuthService);
 
+// State and data property: plan
   plan = signal<PlanDto | null>(null);
+// State and data property: profiles
   profiles = signal<BusinessProfileDto[]>([]);
+// State and data property: profile
   profile = signal<BusinessProfileDto | null>(null);
+// State and data property: calculation
   calculation = signal<PremiumCalculationDto | null>(null);
+// State and data property: calcError
   calcError = signal<string | null>(null);
+// State and data property: loading
   loading = signal(false);
+// State and data property: currentFrequency
   currentFrequency = signal<'Monthly' | 'Yearly'>('Monthly');
+// State and data property: currentCoverage
   currentCoverage = signal<number>(0);
 
+// State and data property: selectedFiles
   selectedFiles: File[] = [];
+// Lifecycle hook: Initialization phase where initial data is loaded from services
 
   ngOnInit() {
     const planId = this.route.snapshot.queryParams['planId'];
     if (!planId) {
       this.router.navigate(['/']);
+// State and data property: return
       return;
     }
 
     this.loadInitialData(planId);
   }
 
+// Retrieves and populates required data for loadInitialData
   loadInitialData(planId: string) {
     this.insuranceService.getAllPlans().subscribe(plans => {
       const p = plans.find(x => x.id === planId);
@@ -55,6 +67,7 @@ export class QuoteGenerateComponent implements OnInit {
     });
   }
 
+// Retrieves and populates required data for loadProfiles
   loadProfiles() {
     this.profileService.getProfiles().subscribe({
       next: (profs) => {
@@ -67,6 +80,7 @@ export class QuoteGenerateComponent implements OnInit {
     });
   }
 
+// Executes core logic for selectProfile
   selectProfile(prof: BusinessProfileDto) {
     this.profile.set(prof);
     if (this.currentCoverage() === 0 && this.plan()) {
@@ -82,6 +96,7 @@ export class QuoteGenerateComponent implements OnInit {
     this.calculateRate();
   }
 
+// Calculates underlying metrics or financial values for calculateRate
   calculateRate() {
     const p = this.plan();
     const prof = this.profile();
@@ -99,11 +114,13 @@ export class QuoteGenerateComponent implements OnInit {
     });
   }
 
+// Executes core logic for registerNewBusiness
   registerNewBusiness() {
     localStorage.setItem('returnUrl', this.router.url);
     this.router.navigate(['/business-profile/create']);
   }
 
+// Event listener hook triggered by onFilesSelected
   onFilesSelected(event: any) {
     const files = event.target.files;
     if (files) {
@@ -113,10 +130,12 @@ export class QuoteGenerateComponent implements OnInit {
     }
   }
 
+// Handles secure deletion or clearance sequence for removeFile
   removeFile(index: number) {
     this.selectedFiles.splice(index, 1);
   }
 
+// Event listener hook triggered by confirmQuote
   confirmQuote() {
     const p = this.plan();
     const prof = this.profile();
@@ -160,7 +179,6 @@ export class QuoteGenerateComponent implements OnInit {
     });
   }
 }
-
 
 
 

@@ -1,3 +1,8 @@
+﻿/**
+ * Test Suite for admin-inquiries
+ * Layer: Angular Component Navigation & DOM
+ * Purpose: Validates component instantiation, automated DOM compilation, and verifies correct isolated dependency ingestion.
+ */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AdminInquiriesComponent } from './admin-inquiries';
 import { SupportService, SupportInquiry } from '../../../services/supportservice';

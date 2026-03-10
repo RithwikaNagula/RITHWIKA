@@ -1,10 +1,13 @@
+﻿// Renders a printable invoice for a completed policy payment, including plan details, amount, and transaction reference.
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule, DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PaymentService, InvoiceDto } from '../../../services/paymentservice';
 
 interface LocalInvoiceDto extends InvoiceDto {
+// State and data property: id
   id: string;
+// State and data property: policyId
   policyId: string;
 }
 
@@ -20,8 +23,11 @@ export class InvoiceComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private paymentService = inject(PaymentService);
 
+// State and data property: invoice
   invoice = signal<LocalInvoiceDto | null>(null);
+// State and data property: loading
   loading = signal(false);
+// Lifecycle hook: Initialization phase where initial data is loaded from services
 
   ngOnInit() {
     const id = this.route.snapshot.params['id']; // This is policyId according to routes
@@ -48,6 +54,7 @@ export class InvoiceComponent implements OnInit {
     }
   }
 
+// Executes core logic for printInvoice
   printInvoice() {
     window.print();
   }

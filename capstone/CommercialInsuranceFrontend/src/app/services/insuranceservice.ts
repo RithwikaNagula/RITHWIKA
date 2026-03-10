@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// Fetches insurance type and plan catalog data; used during plan selection and quote generation.
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,6 +8,7 @@ export interface InsuranceTypeDto {
     typeName: string;
     description: string;
     isActive: boolean;
+    imageUrl?: string;
     createdAt: string;
 }
 
@@ -27,6 +28,7 @@ export interface PlanDto {
     insuranceTypeId: string;
     insuranceTypeName?: string;
     isActive: boolean;
+    imageUrl?: string;
     createdAt: string;
 }
 
@@ -38,6 +40,7 @@ export interface CreatePlanDto {
     basePremium: number;
     durationInMonths: number;
     insuranceTypeId: string;
+    imageUrl?: string;
 }
 
 @Injectable({
@@ -57,7 +60,7 @@ export class InsuranceService {
         return this.http.get<InsuranceTypeDto[]>(this.typeUrl);
     }
 
-    createPlan(dto: CreatePlanDto): Observable<PlanDto> {
+    createPlan(dto: CreatePlanDto | FormData): Observable<PlanDto> {
         return this.http.post<PlanDto>(this.planUrl, dto);
     }
 

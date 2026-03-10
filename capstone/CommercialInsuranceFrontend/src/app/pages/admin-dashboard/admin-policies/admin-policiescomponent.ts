@@ -1,4 +1,4 @@
-// Administrative view for overseeing all customer policies, monitoring their statuses, and tracking agent assignments.
+﻿// Admin view of all policies in the system; supports filtering by status and reassigning policies to agents.
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PolicyService, PolicyDto } from '../../../services/policyservice';
@@ -12,18 +12,23 @@ import { ClaimService, ClaimDto } from '../../../services/claimservice';
     templateUrl: './admin-policiescomponent.html'
 })
 export class AdminPoliciesComponent implements OnInit {
+// State and data property: policies
     policies = signal<PolicyDto[]>([]);
+// State and data property: claims
     claims = signal<ClaimDto[]>([]);
+// State and data property: currentTab
     currentTab: 'Policies' | 'Claims' = 'Policies';
 
     constructor(
         private policyService: PolicyService,
         private claimService: ClaimService
     ) { }
+// Lifecycle hook: Initialization phase where initial data is loaded from services
 
     ngOnInit() {
         this.loadData();
     }
+// Centralized function responsible for fetching server state and populating local component signals
 
     loadData() {
         this.policyService.getAllPolicies().subscribe({
@@ -36,6 +41,7 @@ export class AdminPoliciesComponent implements OnInit {
         });
     }
 
+// Handles secure deletion or clearance sequence for deletePolicy
     deletePolicy(id: string, number: string) {
         if (confirm(`Are you sure you want to permanently delete policy ${number || id}?`)) {
             this.policyService.deletePolicy(id).subscribe({
@@ -49,5 +55,4 @@ export class AdminPoliciesComponent implements OnInit {
         }
     }
 }
-
 

@@ -1,4 +1,4 @@
-// Component dedicated to user authentication, handling login form submission and securing session tokens.
+﻿// Component dedicated to user authentication, handling login form submission and securing session tokens.
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

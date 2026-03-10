@@ -1,3 +1,4 @@
+﻿// Top navigation bar: shows logo, nav links, theme toggle, notification bell, and the authenticated user's name and role with a logout button.
 import { Component, inject, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -17,9 +18,11 @@ export class NavbarComponent {
     notifService = inject(NotificationService);
     private router = inject(Router);
 
+// State and data property: showNotifications
     showNotifications = false;
 
     @HostListener('document:click', ['$event'])
+// Event listener hook triggered by onDocumentClick
     onDocumentClick(event: Event) {
         const target = event.target as HTMLElement;
         if (!target.closest('.relative')) {
@@ -27,6 +30,7 @@ export class NavbarComponent {
         }
     }
 
+// Toggles visibility or state flag for toggleNotifications
     toggleNotifications() {
         this.showNotifications = !this.showNotifications;
         if (this.showNotifications) {
@@ -34,17 +38,19 @@ export class NavbarComponent {
         }
     }
 
+// Mutates local state tracking for markRead
     markRead(n: NotificationDto) {
         if (!n.isRead) this.notifService.markRead(n.id);
     }
 
+// Mutates local state tracking for markAllRead
     markAllRead() {
         this.notifService.markAllRead();
     }
+// Invokes the AuthService to safely purge the local JWT session token and securely navigate to the login route
 
     logout() {
         this.auth.logout();
         this.router.navigate(['/']);
     }
 }
-

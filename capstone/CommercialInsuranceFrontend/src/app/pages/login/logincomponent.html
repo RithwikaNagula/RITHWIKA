@@ -1,123 +1,96 @@
 <div
-  class="min-h-screen flex items-center justify-center bg-taupe-50 dark:bg-[#140E0F] relative overflow-hidden px-6 py-16">
+  class="min-h-screen flex items-center justify-center bg-brand-50 dark:bg-brand-800 relative overflow-hidden px-6 py-16 transition-colors duration-500">
+
   <!-- Decorative Background Elements -->
   <div class="absolute inset-0 pointer-events-none overflow-hidden">
     <div
-      class="absolute top-[-15%] right-[-10%] w-[50%] h-[50%] bg-taupe-200/30 dark:bg-taupe-800/15 rounded-full blur-[140px]">
+      class="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-brand-200/20 dark:bg-brand-500/5 rounded-full blur-[160px]">
     </div>
     <div
-      class="absolute bottom-[-15%] left-[-10%] w-[50%] h-[50%] bg-taupe-100/40 dark:bg-[#1C1517]/40 rounded-full blur-[140px]">
+      class="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-brand-100/30 dark:bg-brand-900/40 rounded-full blur-[160px]">
     </div>
   </div>
 
-  <!-- Card -->
-  <div class="w-full max-w-[440px] relative z-10">
+  <!-- Card Container -->
+  <div class="w-full max-w-[460px] relative z-10">
 
     <div
-      class="bg-white dark:bg-[#1C1517] rounded-[2rem] border border-taupe-200 dark:border-[#2E2122] px-10 py-12 transition-all duration-500"
-      style="box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 20px 60px -12px rgba(144,126,128,0.16);">
+      class="bg-white dark:bg-brand-800 rounded-[2.5rem] border border-brand-100 dark:border-brand-700/50 px-8 sm:px-10 py-12 shadow-2xl shadow-brand-900/10 dark:shadow-black/60 transition-all duration-500">
 
-      <!-- Header -->
+      <!-- Branding & Title -->
       <div class="text-center mb-10">
-        <h2 style="font-family: 'DM Serif Display', Georgia, serif;"
-          class="text-4xl text-taupe-900 dark:text-white mb-3 leading-tight">Welcome Back</h2>
-        <p class="text-taupe-400 text-sm font-medium">Sign in to your InsureDesk account</p>
+        <h2 class="text-4xl text-brand-800 dark:text-white mb-3 font-extrabold tracking-tight">Welcome Back</h2>
+        <p class="text-brand-400 dark:text-brand-500 text-sm font-medium">Please enter your access details</p>
       </div>
 
       <form class="space-y-6" (ngSubmit)="onSubmit()">
 
         <!-- Email Field -->
         <div class="space-y-2">
-          <label for="email-address"
-            class="block text-[11px] font-bold text-taupe-500 dark:text-taupe-400 uppercase tracking-[0.15em]">
-            Email Address
-          </label>
-          <div class="relative group/input">
-            <input id="email-address" name="email" type="email" autocomplete="email" required [(ngModel)]="email"
-              class="w-full bg-taupe-50 dark:bg-[#140E0F] border border-taupe-200 dark:border-[#2E2122] rounded-xl px-5 py-4 pl-12 text-sm text-taupe-900 dark:text-white placeholder:text-taupe-300 dark:placeholder:text-taupe-600 focus:bg-white dark:focus:bg-[#221A1B] focus:border-taupe-400 outline-none transition-all duration-300"
-              style="box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);" placeholder="name@company.com">
-            <div
-              class="absolute left-4 top-1/2 -translate-y-1/2 text-taupe-300 dark:text-taupe-600 group-focus-within/input:text-taupe-500 dark:group-focus-within/input:text-taupe-400 transition-colors duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 h-[18px] w-[18px]" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-              </svg>
-            </div>
-          </div>
+          <label for="email-address" class="input-label">Email Address</label>
+          <input id="email-address" name="email" type="email" autocomplete="email" required [(ngModel)]="email"
+            class="input-field" placeholder="name@company.com">
         </div>
 
         <!-- Password Field -->
         <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <label for="password"
-              class="block text-[11px] font-bold text-taupe-500 dark:text-taupe-400 uppercase tracking-[0.15em]">
-              Password
-            </label>
+          <div class="flex items-center justify-between px-1">
+            <label for="password" class="input-label !mb-0">Password</label>
             <a routerLink="/forgot-password"
-              class="text-[10px] font-bold text-taupe-500 hover:text-taupe-700 dark:hover:text-taupe-300 uppercase tracking-widest transition-colors">
-              Forgot?
+              class="text-[10px] font-bold text-brand-400 hover:text-brand-600 dark:hover:text-brand-300 uppercase tracking-widest transition-colors">
+              Reset?
             </a>
           </div>
-          <div class="relative group/input">
-            <input id="password" name="password" type="password" autocomplete="current-password" required
-              [(ngModel)]="password"
-              class="w-full bg-taupe-50 dark:bg-[#140E0F] border border-taupe-200 dark:border-[#2E2122] rounded-xl px-5 py-4 pl-12 text-sm font-medium text-taupe-900 dark:text-white placeholder:text-taupe-300 dark:placeholder:text-taupe-600 focus:bg-white dark:focus:bg-[#221A1B] focus:border-taupe-400 outline-none transition-all duration-300"
-              style="box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);" placeholder="••••••••">
-            <div
-              class="absolute left-4 top-1/2 -translate-y-1/2 text-taupe-300 dark:text-taupe-600 group-focus-within/input:text-taupe-500 dark:group-focus-within/input:text-taupe-400 transition-colors duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-          </div>
+          <input id="password" name="password" type="password" autocomplete="current-password" required
+            [(ngModel)]="password" class="input-field" placeholder="••••••••">
         </div>
 
-        <!-- Security Verification (CAPTCHA) -->
+        <!-- Security Verification -->
         <div class="space-y-2">
-          <label class="block text-[11px] font-bold text-taupe-500 dark:text-taupe-400 uppercase tracking-[0.15em]">
-            Security Verification
+          <label
+            class="block text-[11px] font-black text-brand-500 dark:text-brand-400 uppercase tracking-[0.2em] px-1">
+            Security Check
           </label>
-          <app-captcha (captchaValid)="onCaptchaValid($event)"></app-captcha>
-        </div>
-
-        <!-- Error Message -->
-        <div *ngIf="error()"
-          class="p-4 bg-rose-50 dark:bg-rose-900/10 border border-rose-200 dark:border-rose-900/30 rounded-xl">
-          <div class="flex items-center gap-2.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500 dark:text-rose-400 shrink-0"
-              viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clip-rule="evenodd" />
-            </svg>
-            <span class="text-xs font-semibold text-rose-700 dark:text-rose-400 leading-tight">{{ error() }}</span>
+          <div class="px-0">
+            <app-captcha (captchaValid)="onCaptchaValid($event)"></app-captcha>
           </div>
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" [disabled]="loading() || !captchaVerified()"
-          class="w-full bg-taupe-600 hover:bg-taupe-700 disabled:bg-taupe-200 dark:disabled:bg-taupe-800/60 text-white disabled:text-taupe-400 rounded-xl py-4 px-8 transition-all duration-300 flex items-center justify-center gap-3 group/btn font-bold text-[11px] uppercase tracking-[0.18em]"
-          style="box-shadow: 0 4px 12px rgba(144,126,128,0.25), 0 12px 32px -8px rgba(144,126,128,0.30);">
-          <span *ngIf="!loading()">Login</span>
-          <span *ngIf="loading()" class="animate-pulse">Verifying...</span>
-          <svg *ngIf="!loading()" xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 transition-transform group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </button>
+        <!-- Global Feedback Message -->
+        <div *ngIf="error()"
+          class="p-4 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 rounded-2xl animate-fade-in">
+          <div class="flex items-center gap-3">
+            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+            <span class="text-[10px] font-black text-rose-700 dark:text-rose-400 uppercase tracking-widest">{{ error()
+              }}</span>
+          </div>
+        </div>
+
+        <!-- Sign In Action -->
+        <div class="pt-2">
+          <button type="submit" [disabled]="loading() || !captchaVerified()"
+            class="w-full h-14 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:grayscale text-white rounded-2xl transition-all duration-300 flex items-center justify-center gap-4 group/btn font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-brand-500/10 active:scale-[0.98] outline-none">
+            <span *ngIf="!loading()">Login</span>
+            <span *ngIf="loading()" class="flex items-center gap-2">
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+            </span>
+          </button>
+        </div>
       </form>
 
-      <!-- Footer -->
-      <div class="mt-8 pt-6 border-t border-taupe-100 dark:border-[#2E2122] text-center">
-        <p class="text-xs text-taupe-400 font-medium">
-          No account?
+      <!-- External Links -->
+      <div class="mt-10 pt-8 border-t border-brand-100 dark:border-brand-700/50 text-center">
+        <p class="text-[11px] text-brand-400 dark:text-brand-500 font-bold uppercase tracking-widest">
+          New to InsureDesk?
           <a routerLink="/register"
-            class="text-taupe-600 dark:text-taupe-400 hover:text-taupe-800 dark:hover:text-taupe-200 font-bold ml-1 transition-colors">
-            Create Profile
+            class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-white font-black ml-2 transition-colors border-b-2 border-brand-500/0 hover:border-brand-500 pb-0.5">
+            Register Account
           </a>
         </p>
       </div>

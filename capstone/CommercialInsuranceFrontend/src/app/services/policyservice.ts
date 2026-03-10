@@ -1,4 +1,4 @@
-// this service provides all the functions needed to manage insurance policies from the frontend application
+﻿// Wraps all policy lifecycle API calls: request quote, accept quote, renew, fetch by user/agent, and retrieve payment schedule.
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -38,6 +38,7 @@ export interface PolicyDto {
     planName: string;
     agentId?: string;
     agentName?: string;
+    planImageUrl?: string;
     selectedCoverageAmount: number;
     remainingCoverageAmount: number;
     premiumAmount: number;
@@ -88,6 +89,7 @@ export class PolicyService {
     private apiUrl = 'http://localhost:5202/api/Policy';
 
     // this function sends a request to the server to create a new insurance policy for a customer
+    // Submits a new policy request (multipart: form fields + document files) to the backend.
     createPolicy(formData: FormData): Observable<PolicyDto> {
         return this.http.post<PolicyDto>(`${this.apiUrl}/request-purchase`, formData);
     }
@@ -101,6 +103,7 @@ export class PolicyService {
     }
 
     // this function calculates how much the insurance will cost based on the plan and coverage details
+    // Sends coverage amount and plan info to the backend calculation engine and returns a premium breakdown.
     calculatePremium(planId: string, coverageAmount: number, businessProfileId?: string, paymentFrequency: string = 'Monthly'): Observable<PremiumCalculationDto> {
         return this.http.post<PremiumCalculationDto>(`${this.apiUrl}/calculate-premium`, {
             planId,
@@ -110,6 +113,7 @@ export class PolicyService {
         });
     }
 
+    // Sends coverage amount and plan info to the backend calculation engine and returns a premium breakdown.
     agentCalculatePremium(planId: string, customerId: string, coverageAmount: number, paymentFrequency: string = 'Monthly'): Observable<PremiumCalculationDto> {
         return this.http.post<PremiumCalculationDto>(`${this.apiUrl}/agent/calculate-premium`, {
             planId,
@@ -123,6 +127,7 @@ export class PolicyService {
         return this.http.post<PolicyDto>(`${this.apiUrl}/${id}/activate`, {});
     }
 
+    // Agent action: moves a PendingReview policy to Approved, triggering a notification to the customer.
     approvePolicy(id: string): Observable<PolicyDto> {
         return this.http.post<PolicyDto>(`${this.apiUrl}/${id}/approve`, {});
     }
@@ -139,6 +144,7 @@ export class PolicyService {
         return this.http.post<PolicyDto>(`${this.apiUrl}/${id}/toggle-autorenew`, {});
     }
 
+    // Requests renewal of an Active or Expired policy; returns the new renewal policy record.
     renewPolicy(id: string): Observable<PolicyDto> {
         return this.http.post<PolicyDto>(`${this.apiUrl}/${id}/renew`, {});
     }

@@ -1,3 +1,4 @@
+﻿// Forgot-password form that sends a reset link to the provided email via the AuthService.
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,13 +12,19 @@ import { AuthService } from '../../services/authservice';
     templateUrl: './forgot-passwordcomponent.html'
 })
 export class ForgotPasswordComponent {
+// State and data property: email
     email = '';
+// State and data property: newPassword
     newPassword = '';
+// State and data property: loading
     loading = signal(false);
+// State and data property: error
     error = signal('');
+// State and data property: success
     success = signal('');
 
     constructor(private authService: AuthService, private router: Router) { }
+// Triggered organically on form submission, intercepts click handling to validate and process payload
 
     onSubmit() {
         if (!this.email || !this.newPassword) return;

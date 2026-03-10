@@ -1,3 +1,4 @@
+﻿// Persists and applies the user's dark/light mode preference using localStorage and the Tailwind 'dark' class on the html element.
 import { Injectable, signal, effect } from '@angular/core';
 
 @Injectable({
@@ -38,7 +39,9 @@ export class ThemeService {
         }
     }
 
+    // Flips the stored theme between 'dark' and 'light', updates localStorage, and adds/removes
+    // the Tailwind 'dark' class on the <html> element so all dark: variants take effect instantly.
     public toggleTheme(): void {
-        this.isDarkMode.update(dark => !dark);
+        this.isDarkMode.update((dark: boolean) => !dark);
     }
 }

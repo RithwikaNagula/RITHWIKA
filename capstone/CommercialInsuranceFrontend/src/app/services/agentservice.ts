@@ -1,4 +1,4 @@
-// Implementing core module functionality and external dependencies.
+﻿// Wraps agent dashboard API calls: fetch assigned policy portfolio, commission stats, and client list.
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

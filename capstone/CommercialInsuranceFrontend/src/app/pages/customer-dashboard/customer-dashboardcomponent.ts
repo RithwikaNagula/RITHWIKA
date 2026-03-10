@@ -1,7 +1,8 @@
-// Centralized portal for customers to view their active policies, manage claims, and access their notifications and profile.
+﻿// Customer dashboard: displays active/pending/expired policies, claims lifecycle tracker with stepper progress, metric cards, and a profile edit panel.
 import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { PolicyService, PolicyDto } from '../../services/policyservice';
 import { AuthService } from '../../services/authservice';
 import { ClaimService, ClaimDto } from '../../services/claimservice';
@@ -9,7 +10,7 @@ import { ClaimService, ClaimDto } from '../../services/claimservice';
 @Component({
   selector: 'app-customer-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './customer-dashboardcomponent.html',
   styleUrl: './customer-dashboardcomponent.css'
 })
@@ -18,11 +19,24 @@ export class CustomerDashboardComponent implements OnInit {
   authService = inject(AuthService);
   private claimService = inject(ClaimService);
 
+  // State and data property: policies
   policies = signal<PolicyDto[]>([]);
+  // State and data property: claims
   claims = signal<ClaimDto[]>([]);
+  // State and data property: isEditingProfile
+  isEditingProfile = signal(false);
+  activeTab = signal<'overview' | 'policies' | 'claims'>('overview');
+  profileForm = {
+    fullName: '',
+    email: ''
+  };
+  loading = signal(false);
 
+  // State and data property: activePolicies
   activePolicies = computed(() => this.policies().filter(p => p.status === 'Active'));
+  // State and data property: pendingPolicies
   pendingPolicies = computed(() => this.policies().filter(p => p.status !== 'Active' && p.status !== 'Cancelled' && p.status !== 'Expired'));
+  // State and data property: expiredPolicies
   expiredPolicies = computed(() => this.policies().filter(p => p.status === 'Expired'));
 
   // Helper: policy expiring within 30 days
@@ -40,10 +54,12 @@ export class CustomerDashboardComponent implements OnInit {
       case 'Approved': return 75;
       case 'Rejected': return 100;
       case 'Settled': return 100;
+      // State and data property: default
       default: return 0;
     }
   }
 
+  // Retrieves and populates required data for getClaimStatusDate
   getClaimStatusDate(claim: ClaimDto, status: string): string | null {
     if (status === 'Submitted') {
       return claim.createdAt;
@@ -60,13 +76,30 @@ export class CustomerDashboardComponent implements OnInit {
     return log ? log.changedAt : null;
   }
 
+  // Executes core logic for openClaimLog
   openClaimLog(id: string) {
     alert('Detailed claim logs are currently being integrated and will be available in the next system release.');
   }
 
+  getSteps(claim: ClaimDto): { label: string; done: boolean; rejected: boolean; date: string | null }[] {
+    const status = claim.status;
+    const progress = this.getClaimProgress(status);
+    const isRejected = status === 'Rejected';
+
+    return [
+      { label: 'Submitted', done: progress >= 25, rejected: false, date: this.getClaimStatusDate(claim, 'Submitted') },
+      { label: 'Review', done: progress >= 50, rejected: false, date: this.getClaimStatusDate(claim, 'UnderInvestigation') },
+      { label: isRejected ? 'Rejected' : 'Approved', done: progress >= 75, rejected: isRejected && progress >= 75, date: this.getClaimStatusDate(claim, isRejected ? 'Rejected' : 'Approved') },
+      { label: 'Settled', done: progress === 100 && !isRejected, rejected: false, date: this.getClaimStatusDate(claim, 'Settled') }
+    ];
+  }
+  // Lifecycle hook: Initialization phase where initial data is loaded from services
+
   ngOnInit() {
+    this.authService.getProfile().subscribe();
     this.loadPolicies();
   }
+  // Fetches the policy list scoped to current role (Agent or Customer) to render within dashboard tables
 
   loadPolicies() {
     this.policyService.getMyPolicies().subscribe({
@@ -78,6 +111,7 @@ export class CustomerDashboardComponent implements OnInit {
     });
   }
 
+  // Retrieves and populates required data for loadClaims
   loadClaims(policies: PolicyDto[]) {
     policies.forEach(p => {
       this.claimService.getClaimsByPolicy(p.id).subscribe({
@@ -90,6 +124,7 @@ export class CustomerDashboardComponent implements OnInit {
     });
   }
 
+  // Toggles visibility or state flag for toggleAutoRenew
   toggleAutoRenew(policyId: string) {
     this.policyService.toggleAutoRenew(policyId).subscribe({
       next: (updatedPolicy) => {
@@ -99,6 +134,7 @@ export class CustomerDashboardComponent implements OnInit {
     });
   }
 
+  // Executes core logic for renewPolicy
   renewPolicy(policyId: string, policyNumber: string) {
     if (!confirm(`Renew policy ${policyNumber}? A new policy will be created starting from the next period.`)) return;
     this.policyService.renewPolicy(policyId).subscribe({
@@ -112,8 +148,36 @@ export class CustomerDashboardComponent implements OnInit {
       }
     });
   }
-}
 
+  // Toggles visibility or state flag for toggleProfileEdit
+  toggleProfileEdit() {
+    const user = this.authService.currentUser();
+    if (user) {
+      this.profileForm = {
+        fullName: user.fullName,
+        email: user.email
+      };
+      this.isEditingProfile.set(!this.isEditingProfile());
+    }
+  }
+
+  // Processes form submission and persists changes for onSubmit
+  onSubmit() {
+    this.loading.set(true);
+    this.authService.updateProfile(this.profileForm).subscribe({
+      next: (updatedUser) => {
+        this.loading.set(false);
+        alert('Profile updated successfully!');
+        this.isEditingProfile.set(false);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        const msg = err?.error?.message || err?.message || 'Failed to update profile.';
+        alert('Error: ' + msg);
+      }
+    });
+  }
+}
 
 
 

@@ -1,8 +1,8 @@
-<div class="min-h-screen bg-taupe-50 dark:bg-[#1A1314] py-16 px-4 flex items-center justify-center relative overflow-hidden">
+<div class="min-h-screen bg-brand-50 dark:bg-brand-800 py-16 px-4 flex items-center justify-center relative overflow-hidden">
   <!-- Decorative Elements -->
   <div class="absolute top-0 right-0 w-[40%] h-[40%] bg-emerald-100/10 rounded-full blur-[120px] pointer-events-none">
   </div>
-  <div class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-taupe-50/20 dark:bg-[#1A1314]/20 rounded-full blur-[120px] pointer-events-none">
+  <div class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-brand-50/20 dark:bg-brand-800/20 rounded-full blur-[120px] pointer-events-none">
   </div>
 
   <div class="max-w-md w-full relative z-10">
@@ -16,70 +16,70 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
         </svg>
       </div>
-      <span class="text-[10px] font-black text-emerald-600 uppercase tracking-[0.4em] mb-3 block">Deployment
+      <span class="text-sm font-black text-emerald-600 uppercase tracking-wider mb-3 block">Deployment
         Finalized</span>
-      <h1 class="text-3xl font-black text-taupe-900 dark:text-white tracking-tighter uppercase leading-none italic">Protocol <span
+      <h1 class="text-3xl font-black text-brand-900 dark:text-white tracking-tighter uppercase leading-none italic">Protocol <span
           class="text-emerald-600 not-italic">Active</span></h1>
     </div>
 
     <!-- Invoice Card -->
     <div *ngIf="invoice()"
-      class="bg-white dark:bg-[#1A1314] rounded-[2.5rem] border border-white dark:border-taupe-800 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.03)] overflow-hidden">
-      <div class="px-8 py-5 border-b border-taupe-50 dark:border-taupe-800 bg-taupe-50/30 dark:bg-[#1A1314]/30 flex justify-between items-center">
-        <h2 class="text-[9px] font-black text-taupe-400 uppercase tracking-widest italic leading-none">Receipt Manifest
+      class="bg-white dark:bg-brand-800 rounded-[2.5rem] border border-white dark:border-brand-800 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.03)] overflow-hidden">
+      <div class="px-8 py-5 border-b border-gray-50 dark:border-brand-800 bg-brand-50/30 dark:bg-brand-800/30 flex justify-between items-center">
+        <h2 class="text-xs font-black text-brand-400 uppercase tracking-widest italic leading-none">Receipt Manifest
         </h2>
-        <span class="text-[10px] font-black text-taupe-600 dark:text-taupe-400 font-mono tracking-tighter italic">#{{
+        <span class="text-sm font-black text-brand-600 dark:text-brand-400 font-mono tracking-tighter italic">#{{
           invoice()!.invoiceNumber }}</span>
       </div>
 
       <div class="p-8 space-y-6">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <p class="text-[8px] font-black text-taupe-400 uppercase tracking-widest mb-1 italic">Custody</p>
-            <p class="text-[11px] font-black text-taupe-900 dark:text-white uppercase tracking-tight">{{ invoice()!.customerName }}</p>
+            <p class="text-xs font-black text-brand-400 uppercase tracking-widest mb-1 italic">Custody</p>
+            <p class="text-sm font-black text-brand-900 dark:text-white uppercase tracking-tight">{{ invoice()!.customerName }}</p>
           </div>
           <div class="text-right">
-            <p class="text-[8px] font-black text-taupe-400 uppercase tracking-widest mb-1 italic">Reference</p>
-            <p class="text-[10px] font-mono font-black text-taupe-600 dark:text-taupe-400 italic tracking-tighter">{{
+            <p class="text-xs font-black text-brand-400 uppercase tracking-widest mb-1 italic">Reference</p>
+            <p class="text-sm font-mono font-black text-brand-600 dark:text-brand-400 italic tracking-tighter">{{
               invoice()!.transactionId.substring(0,12) }}...</p>
           </div>
         </div>
 
-        <div class="pt-6 border-t border-taupe-50 dark:border-taupe-800 space-y-4">
+        <div class="pt-6 border-t border-gray-50 dark:border-brand-800 space-y-4">
           <div class="flex justify-between items-center">
-            <span class="text-[9px] font-black text-taupe-400 uppercase tracking-widest italic">Node ID</span>
-            <span class="text-[10px] font-mono font-black text-taupe-900 dark:text-white">{{ invoice()!.policyNumber }}</span>
+            <span class="text-xs font-black text-brand-400 uppercase tracking-widest italic">Node ID</span>
+            <span class="text-sm font-mono font-black text-brand-900 dark:text-white">{{ invoice()!.policyNumber }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-[9px] font-black text-taupe-400 uppercase tracking-widest italic">Protection Tier</span>
-            <span class="text-[10px] font-black text-taupe-900 dark:text-white uppercase italic">{{ invoice()!.planName }}</span>
+            <span class="text-xs font-black text-brand-400 uppercase tracking-widest italic">Protection Tier</span>
+            <span class="text-sm font-black text-brand-900 dark:text-white uppercase italic">{{ invoice()!.planName }}</span>
           </div>
         </div>
 
-        <div class="pt-6 border-t border-taupe-50 dark:border-taupe-800">
+        <div class="pt-6 border-t border-gray-50 dark:border-brand-800">
           <div
-            class="bg-taupe-50 dark:bg-[#1A1314] rounded-2xl p-5 flex justify-between items-end border border-taupe-100 dark:border-taupe-800 transition-all hover:bg-white">
+            class="bg-brand-50 dark:bg-brand-800 rounded-2xl p-5 flex justify-between items-end border border-brand-100 dark:border-brand-800 transition-all hover:bg-white">
             <div>
-              <p class="text-[8px] font-black text-taupe-600 dark:text-taupe-400 uppercase tracking-widest mb-1 italic leading-none">Net
+              <p class="text-xs font-black text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-1 italic leading-none">Net
                 Remittance</p>
-              <p class="text-[8px] font-bold text-taupe-400 uppercase tracking-widest leading-none">Finalized Value</p>
+              <p class="text-xs font-bold text-brand-400 uppercase tracking-widest leading-none">Finalized Value</p>
             </div>
-            <p class="text-3xl font-black text-taupe-900 dark:text-white tracking-tighter italic leading-none">₹{{
+            <p class="text-3xl font-black text-brand-900 dark:text-white tracking-tighter italic leading-none">₹{{
               invoice()!.installmentAmount | number:'1.0-2':'en-IN' }}</p>
           </div>
         </div>
 
         <div class="pt-4 flex flex-col gap-3">
           <button (click)="printInvoice()"
-            class="w-full py-4 bg-taupe-900 hover:bg-taupe-800 text-white rounded-xl text-[9px] font-black uppercase tracking-widest text-center transition-all shadow-lg shadow-taupe-900/10 active:scale-95">Download
+            class="w-full py-4 bg-brand-900 hover:bg-brand-800 text-white rounded-xl text-xs font-black uppercase tracking-widest text-center transition-all shadow-lg shadow-gray-900/10 active:scale-95">Download
             PDF Manifest</button>
 
           <div class="grid grid-cols-2 gap-3">
             <a [routerLink]="['/payment-schedule', invoice()!.policyNumber]"
-              class="py-3 bg-white dark:bg-[#1A1314] border border-taupe-100 dark:border-taupe-800 text-taupe-900 dark:text-white rounded-xl text-[9px] font-black uppercase tracking-widest text-center hover:bg-taupe-50 transition-all active:scale-95">Historical
+              class="py-3 bg-white dark:bg-brand-800 border border-brand-100 dark:border-brand-800 text-brand-900 dark:text-white rounded-xl text-xs font-black uppercase tracking-widest text-center hover:bg-brand-50 transition-all active:scale-95">Historical
               Ledger</a>
             <a routerLink="/dashboard"
-              class="py-3 bg-taupe-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest text-center hover:bg-taupe-700 transition-all shadow-lg shadow-taupe-600/10 active:scale-95">Portfolio
+              class="py-3 bg-gray-600 text-white rounded-xl text-xs font-black uppercase tracking-widest text-center hover:bg-gray-700 transition-all shadow-lg shadow-gray-600/10 active:scale-95">Portfolio
               Center</a>
           </div>
         </div>
@@ -87,8 +87,10 @@
     </div>
 
     <div class="mt-8 text-center opacity-40">
-      <p class="text-[8px] font-black text-taupe-400 uppercase tracking-[0.2em] italic">Risk mitigated by InsureDesk
+      <p class="text-xs font-black text-brand-400 uppercase tracking-wide italic">Risk mitigated by InsureDesk
         Underwriting Systems</p>
     </div>
   </div>
 </div>
+
+
