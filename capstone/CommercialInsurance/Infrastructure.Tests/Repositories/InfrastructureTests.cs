@@ -1,3 +1,6 @@
+// Test Layer: Infrastructure Data Access
+// Purpose: Ensures Entity Framework Core database contexts and repository abstract queries compile and execute correctly against in-memory DBs.
+// Design: Uses XUnit and Moq to isolate dependencies and guarantee idempotent execution.
 using Xunit;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +23,7 @@ namespace Infrastructure.Tests.Repositories
                 .Options;
         }
 
+        // Verifies that the UserRepository correctly saves a new User entity to the database and retrieves it
         [Fact]
         public async Task AddUser_ShouldPersistSuccessfully()
         {
@@ -39,6 +43,7 @@ namespace Infrastructure.Tests.Repositories
             savedUser!.Email.Should().Be("test@domain.com");
         }
 
+        // Ensures the UserRepository can accurately query and retrieve a user by their unique email address
         [Fact]
         public async Task AddUser_ShouldPreventDuplicateEmail()
         {
@@ -59,6 +64,7 @@ namespace Infrastructure.Tests.Repositories
             userCheck!.Email.Should().Be("duplicate@domain.com");
         }
 
+        // Confirms that the PolicyRepository precisely filters and returns only the policies for a specific user ID
         [Fact]
         public async Task GetPoliciesByCustomer_ShouldReturnCorrectRecords()
         {
@@ -82,6 +88,7 @@ namespace Infrastructure.Tests.Repositories
             policies.All(p => p.UserId == "cust1").Should().BeTrue();
         }
 
+        // Tests the DbContext's core ability to track an added entity and successfully commit it to the underlying data store
         [Fact]
         public async Task SaveChanges_ShouldCommitData()
         {
@@ -103,6 +110,7 @@ namespace Infrastructure.Tests.Repositories
             savedPlan.Should().NotBeNull();
         }
 
+        // Ensures that retrieved entities can be correctly filtered by enum status locally in memory
         [Fact]
         public async Task Repository_ShouldFilterActivePoliciesCorrectly()
         {

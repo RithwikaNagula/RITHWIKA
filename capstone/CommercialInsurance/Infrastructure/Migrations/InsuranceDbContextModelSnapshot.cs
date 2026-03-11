@@ -338,6 +338,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("DurationInMonths")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("InsuranceTypeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");

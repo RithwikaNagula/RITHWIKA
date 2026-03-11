@@ -1,3 +1,6 @@
+// Test Layer: Application Services
+// Purpose: Validates core business logic, algorithm correctness, and interactions with mocked domain repositories.
+// Design: Uses XUnit and Moq to isolate dependencies and guarantee idempotent execution.
 using Xunit;
 using FluentAssertions;
 using Domain.Entities;
@@ -7,6 +10,7 @@ namespace Application.Tests.Assignment
 {
     public class AssignmentTests
     {
+        // Verifies that assigning an agent ID to a User entity systematically mutates the binding property
         [Fact]
         public void User_ShouldStoreAssignedAgentCorrectly()
         {

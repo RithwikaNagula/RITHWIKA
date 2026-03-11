@@ -1,3 +1,4 @@
+﻿// DTO representing a single user notification with type, message, read status, and timestamp.
 using Domain.Enums;
 
 namespace Application.DTOs

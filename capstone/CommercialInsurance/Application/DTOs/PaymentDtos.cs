@@ -1,7 +1,9 @@
+// DTOs for payment initiation and confirmation; includes premium amount, policy reference, and payment status.
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs
 {
+    // Inbound DTO for initiating a payment: references the policy, frequency, and payment method
     public class CreatePaymentDto
     {
         [Required]
@@ -16,6 +18,7 @@ namespace Application.DTOs
         public string? PaidByUserId { get; set; }
     }
 
+    // Full outbound response after a payment is processed, including invoice and installment details
     public class PaymentResponseDto
     {
         public string Id { get; set; } = string.Empty;
@@ -40,6 +43,7 @@ namespace Application.DTOs
         public decimal SelectedCoverageAmount { get; set; }
     }
 
+    // Compact outbound DTO for payment history list views
     public class PaymentDto
     {
         public string Id { get; set; } = string.Empty;
@@ -52,6 +56,7 @@ namespace Application.DTOs
         public string InvoiceInfo { get; set; } = string.Empty;
     }
 
+    // Outbound DTO for generating a printable invoice with full coverage and installment breakdown
     public class InvoiceDto
     {
         public string InvoiceNumber { get; set; } = string.Empty;
@@ -73,6 +78,7 @@ namespace Application.DTOs
         public string Status { get; set; } = string.Empty;
     }
 
+    // Outbound DTO listing all scheduled installments for a policy, including amounts and due dates
     public class PaymentScheduleDto
     {
         public string PolicyId { get; set; } = string.Empty;
@@ -84,6 +90,7 @@ namespace Application.DTOs
         public List<InstallmentDto> Schedule { get; set; } = new();
     }
 
+    // Represents a single installment in a payment schedule with its paid/unpaid status
     public class InstallmentDto
     {
         public string PaymentId { get; set; } = string.Empty;

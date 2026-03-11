@@ -1,3 +1,6 @@
+// Test Layer: Domain Entities
+// Purpose: Asserts intrinsic behavior and state mutations isolated within the raw business entities.
+// Design: Uses XUnit and Moq to isolate dependencies and guarantee idempotent execution.
 using Xunit;
 using FluentAssertions;
 using Domain.Entities;
@@ -9,6 +12,7 @@ namespace Domain.Tests.Entities
 {
     public class PolicyTests
     {
+        // Verifies the correct assignment and retrieval of the policy's valid date interval bounds
         [Fact]
         public void Policy_ShouldSetDatesProperly()
         {
@@ -24,6 +28,7 @@ namespace Domain.Tests.Entities
 
     public class ClaimTests
     {
+        // Confirms that a newly instantiated Claim sets its initial lifecycle state to Submitted
         [Fact]
         public void Claim_ShouldHaveSubmittedStatusByDefault()
         {
@@ -34,6 +39,7 @@ namespace Domain.Tests.Entities
             claim.Status.Should().Be(ClaimStatus.Submitted);
         }
 
+        // Verifies that the Status property on a Claim is mutable and can be advanced by an officer
         [Fact]
         public void Claim_CanUpdateStatus()
         {
@@ -50,6 +56,7 @@ namespace Domain.Tests.Entities
 
     public class BusinessRuleExceptionTests
     {
+        // Ensures the custom domain exception properly routes its specific message to the base Exception 
         [Fact]
         public void BusinessRuleException_ShouldStoreCorrectMessage()
         {
@@ -63,6 +70,7 @@ namespace Domain.Tests.Entities
 
     public class UserTests
     {
+        // Verifies that a newly created User entity defaults to the first Enum value
         [Fact]
         public void User_ShouldInitializeWithDefaultRole()
         {

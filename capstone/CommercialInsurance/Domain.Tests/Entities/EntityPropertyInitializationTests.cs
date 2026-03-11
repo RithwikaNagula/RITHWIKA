@@ -1,3 +1,6 @@
+// Test Layer: Domain Entities
+// Purpose: Asserts intrinsic behavior and state mutations isolated within the raw business entities.
+// Design: Uses XUnit and Moq to isolate dependencies and guarantee idempotent execution.
 using Xunit;
 using FluentAssertions;
 using Domain.Entities;
@@ -9,6 +12,7 @@ namespace Domain.Tests.Entities
 {
     public class DomainLogicTests
     {
+        // Verifies that a newly instantiated Payment object defaults its Status property to Pending
         [Fact]
         public void Payment_ShouldInitializeWithPendingStatus()
         {
@@ -16,6 +20,7 @@ namespace Domain.Tests.Entities
             payment.Status.Should().Be(PaymentStatus.Pending);
         }
 
+        // Ensures that the Plan entity accurately stores the assigned duration string or integer
         [Fact]
         public void Plan_ShouldCalculateCorrectDuration()
         {
@@ -23,6 +28,7 @@ namespace Domain.Tests.Entities
             plan.DurationInMonths.Should().Be(12);
         }
 
+        // Verifies that string properties for type name and description are correctly assigned
         [Fact]
         public void InsuranceType_ShouldHoldCorrectMetadata()
         {
@@ -31,6 +37,7 @@ namespace Domain.Tests.Entities
             type.Description.Should().Be("Cyber Security");
         }
 
+        // Confirms that a newly created Notification defaults its IsRead flag to false
         [Fact]
         public void Notification_ShouldBeUnreadByDefault()
         {
@@ -38,6 +45,7 @@ namespace Domain.Tests.Entities
             notification.IsRead.Should().BeFalse();
         }
 
+        // Tests the mutability of the Policy Status property to ensure it can transition to terminal states
         [Fact]
         public void Policy_ShouldHaveCorrectStatusTransitions()
         {

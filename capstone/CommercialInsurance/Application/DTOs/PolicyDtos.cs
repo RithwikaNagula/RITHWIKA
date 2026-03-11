@@ -1,7 +1,9 @@
+// DTOs for the full policy lifecycle: quote request, policy detail view, status transitions, and renewal requests.
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs
 {
+    // Inbound DTO for creating or upgrading a policy from a quote; includes coverage, premium, and frequency
     public class CreatePolicyDto
     {
         public string? QuoteId { get; set; }
@@ -32,6 +34,7 @@ namespace Application.DTOs
         public bool AutoRenew { get; set; }
     }
 
+    // Inbound DTO for requesting a premium calculation; requires plan, customer, and desired coverage amount
     public class PremiumCalculationRequestDto
     {
         public string PlanId { get; set; } = string.Empty;
@@ -42,6 +45,7 @@ namespace Application.DTOs
         public string PaymentFrequency { get; set; } = "Monthly"; // "Monthly" or "Yearly"
     }
 
+    // Outbound DTO returning the calculated premium breakdown with all risk multipliers and commission
     public class PremiumCalculationDto
     {
         public string QuoteId { get; set; } = string.Empty;
@@ -59,6 +63,7 @@ namespace Application.DTOs
         public string PaymentFrequency { get; set; } = "Monthly";
     }
 
+    // Full outbound DTO for policy detail views with customer, plan, agent, coverage, and document data
     public class PolicyDto
     {
         public string Id { get; set; } = string.Empty;
@@ -67,6 +72,7 @@ namespace Application.DTOs
         public string CustomerName { get; set; } = string.Empty;
         public string PlanId { get; set; } = string.Empty;
         public string PlanName { get; set; } = string.Empty;
+        public string? PlanImageUrl { get; set; }
         public string? AgentId { get; set; }
         public string? AgentName { get; set; }
         public string CreatedByUserId { get; set; } = string.Empty;
@@ -91,6 +97,7 @@ namespace Application.DTOs
         public List<DocumentDto> Documents { get; set; } = new List<DocumentDto>();
     }
 
+    // Outbound DTO representing a file attached to a policy or claim
     public class DocumentDto
     {
         public string Id { get; set; } = string.Empty;
@@ -101,6 +108,7 @@ namespace Application.DTOs
         public DateTime UploadedAt { get; set; }
     }
 
+    // Inbound DTO for agent rejection of a policy request; requires a mandatory reason string
     public class RejectPolicyDto
     {
         [Required]

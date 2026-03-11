@@ -1,4 +1,4 @@
-// this controller manages every operation related to insurance claims and connects the user interface to the claim logic
+// Manages the full claims lifecycle: file a new claim, list claims by policy or user, upload supporting documents, and update claim status (claims officer only).
 using System.Security.Claims;
 using Application.DTOs;
 using Application.Interfaces.Services;
@@ -9,38 +9,64 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize] // All claim endpoints require an authenticated user
     public class ClaimController : ControllerBase
     {
-        // this is the service that contains all the actual business logic for claims
         private readonly IClaimService _claimService;
 
+        // IClaimService handles the full claim lifecycle: filing, status updates, document uploads
         public ClaimController(IClaimService claimService)
         {
             _claimService = claimService;
         }
 
-        [HttpPost("{policyId}")]
+        // POST api/claim/{policyId}/file
+        // Customer endpoint: submits a new claim against an active policy.
+        // Accepts a multipart form: claim details (description, amount) + evidence file uploads.
+        // The backend validates remaining coverage and assigns the correct claims officer automatically.
+        [HttpPost("{policyId}/file")]
         [Authorize(Roles = "Customer")]
-        // this action allows customers to file a new claim for an existing policy
         public async Task<IActionResult> FileClaim(string policyId, [FromForm] CreateClaimDto dto, IEnumerable<IFormFile> files)
         {
             var result = await _claimService.FileClaimAsync(dto, policyId, files);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
-        }
-
-        [HttpPut("{id}/status")]
-        [Authorize(Roles = "ClaimsOfficer")]
-        // this action lets a claims officer change the status of a specific claim
-        public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateClaimStatusDto dto)
-        {
-            var officerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            var result = await _claimService.UpdateClaimStatusAsync(id, dto, officerId);
             return Ok(result);
         }
 
+        // GET api/claim/policy/{policyId}
+        // Returns all claims filed against a specific policy with their full history logs.
+        // Used on the policy detail view to show the customer the status of each claim.
+        [HttpGet("policy/{policyId}")]
+        public async Task<IActionResult> GetByPolicy(string policyId)
+        {
+            var result = await _claimService.GetClaimsByPolicyAsync(policyId);
+            return Ok(result);
+        }
+
+        // GET api/claim/officer
+        // Returns all claims assigned to the authenticated claims officer; used to populate the officer worklist.
+        [HttpGet("officer")]
+        [Authorize(Roles = "ClaimsOfficer")]
+        public async Task<IActionResult> GetByOfficer()
+        {
+            // Extract the officer's user ID from their JWT to scope the query
+            var officerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var result = await _claimService.GetClaimsByOfficerAsync(officerId);
+            return Ok(result);
+        }
+
+        // GET api/claim/all
+        // Admin-only: retrieves every claim in the system for the admin claims overview page.
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _claimService.GetAllClaimsAsync();
+            return Ok(result);
+        }
+
+        // GET api/claim/{id}
+        // Retrieves a single claim by its ID, including full audit history and attached documents.
         [HttpGet("{id}")]
-        // this action retrieves the full details of a single claim record
         public async Task<IActionResult> GetById(string id)
         {
             var result = await _claimService.GetClaimByIdAsync(id);
@@ -48,27 +74,16 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("by-policy/{policyId}")]
-        public async Task<IActionResult> GetByPolicy(string policyId)
+        // PUT api/claim/{claimId}/status
+        // Claims officer endpoint: updates the claim's status (UnderReview, Approved, Rejected, Settled)
+        // and records an audit log entry with the officer's remarks.
+        [HttpPut("{claimId}/status")]
+        [Authorize(Roles = "ClaimsOfficer,Admin")]
+        public async Task<IActionResult> UpdateStatus(string claimId, [FromBody] UpdateClaimStatusDto dto)
         {
-            var result = await _claimService.GetClaimsByPolicyAsync(policyId);
-            return Ok(result);
-        }
-
-        [HttpGet("my-assignments")]
-        [Authorize(Roles = "ClaimsOfficer")]
-        public async Task<IActionResult> GetMyAssignments()
-        {
+            // Pass the officer's ID from the JWT so the audit log records who made the change
             var officerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            var result = await _claimService.GetClaimsByOfficerAsync(officerId);
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Admin,ClaimsOfficer")]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await _claimService.GetAllClaimsAsync();
+            var result = await _claimService.UpdateClaimStatusAsync(claimId, dto, officerId);
             return Ok(result);
         }
     }

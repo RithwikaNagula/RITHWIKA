@@ -1,7 +1,9 @@
+// DTOs for insurance plans: attributes such as coverage range, base premium, duration, and description.
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs
 {
+    // Inbound DTO for defining a new plan under an insurance type with coverage limits and pricing
     public class CreatePlanDto
     {
         [Required, StringLength(100)]
@@ -24,8 +26,11 @@ namespace Application.DTOs
 
         [Required]
         public string InsuranceTypeId { get; set; } = string.Empty;
+
+        public string? ImageUrl { get; set; }
     }
 
+    // Outbound DTO representing a plan with its parent insurance type name and active status
     public class PlanDto
     {
         public string Id { get; set; } = string.Empty;
@@ -38,6 +43,7 @@ namespace Application.DTOs
         public string InsuranceTypeId { get; set; } = string.Empty;
         public string InsuranceTypeName { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

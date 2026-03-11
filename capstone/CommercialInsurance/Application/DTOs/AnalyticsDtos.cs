@@ -1,19 +1,23 @@
+// DTOs for analytics data returned to the admin dashboard: revenue summaries, claim distributions, and user growth timeseries.
 using System.Collections.Generic;
 
 namespace Application.DTOs
 {
+    // Carries per-agent KPIs displayed in the admin analytics agent comparison table
     public class AgentPerformanceDto
     {
         public string AgentName { get; set; } = string.Empty;
         public decimal TotalCommission { get; set; }
     }
 
+    // Carries per-officer KPIs: total settlements handled by each claims officer
     public class ClaimsPerformanceDto
     {
         public string OfficerName { get; set; } = string.Empty;
         public int TotalSettlements { get; set; }
     }
 
+    // Aggregated claims statistics: approval rate, total counts, and officer-level breakdowns
     public class ClaimsAnalyticsDto
     {
         public List<ClaimsPerformanceDto> OfficerPerformances { get; set; } = new();
@@ -22,6 +26,7 @@ namespace Application.DTOs
         public int ApprovedClaims { get; set; }
     }
 
+    // Revenue time-series data: premiums collected, settlements paid, net revenue, and period-over-period growth
     public class RevenueAnalyticsDto
     {
         public decimal TotalPremiumCollected { get; set; }

@@ -1,3 +1,4 @@
+﻿// SignalR hub that pushes real-time notifications to connected clients; clients join a user-specific group on connect.
 using Microsoft.AspNetCore.SignalR;
 using Application.DTOs;
 

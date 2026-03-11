@@ -1,4 +1,4 @@
-// Provides core functionality and structures for the application.
+﻿// Processes premium payments for approved policies, transitions policy status to Active on success, and records payment history.
 using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;

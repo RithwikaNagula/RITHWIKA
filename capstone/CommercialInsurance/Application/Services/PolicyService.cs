@@ -1,4 +1,4 @@
-// Provides core functionality and structures for the application.
+﻿// Orchestrates the policy lifecycle: quote creation, agent assignment, premium calculation, issuance, auto-renewal, and expiry checks.
 using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -46,18 +46,24 @@ namespace Application.Services
             _notificationService = notificationService;
         }
 
+        // Generates a random GUID as the policy's primary key
         private async Task<string> GenerateNextId()
         {
             return Guid.NewGuid().ToString();
         }
 
+        // Generates a random GUID for document records attached to a policy
         private async Task<string> GenerateDocId()
         {
             return Guid.NewGuid().ToString();
         }
 
+        // Creates a new policy (or upgrades an existing quote to PendingReview).
+        // Validates the business profile, plan, duplicate check, documents, then persists
+        // the policy and uploads the supporting documents to wwwroot/uploads/{userId}/policies/{policyId}/.
         public async Task<PolicyDto> CreatePolicyAsync(CreatePolicyDto dto, string createdByUserId, IEnumerable<IFormFile> documents, string? agentId = null)
         {
+            // A completed business profile is required before any policy can be created
             var profile = await _profileRepository.GetByIdAsync(dto.BusinessProfileId);
             if (profile == null)
                 throw new KeyNotFoundException("Business Profile not found.");
@@ -74,6 +80,7 @@ namespace Application.Services
             var customer = await _userRepository.GetByIdAsync(profile.UserId);
             if (customer == null) throw new KeyNotFoundException("Customer not found.");
 
+            // If the customer does not yet have an agent, auto-assign the least-loaded one
             var assignedAgentId = customer.AssignedAgentId;
             if (string.IsNullOrEmpty(assignedAgentId))
             {
@@ -85,9 +92,10 @@ namespace Application.Services
                 }
             }
 
-            // Always override with assigned agent
+            // Always use the customer's assigned agent, ignoring any agentId passed by the caller
             agentId = assignedAgentId;
 
+            // Duplicate guard: a customer cannot hold two active/pending policies for the same plan + business
             var existingPolicies = await _policyRepository.GetPoliciesByUserIdAsync(customer.Id);
             bool hasDuplicate = existingPolicies.Any(p =>
                 p.PlanId == dto.PlanId &&
@@ -102,7 +110,7 @@ namespace Application.Services
                 throw new InvalidOperationException("This business already has an active or pending policy for this plan.");
             }
 
-            // Document Validation
+            // Document Validation: enforce 1–5 files, only PDF/JPG/PNG, max 5 MB each
             var files = documents?.ToList() ?? new List<IFormFile>();
             if (!files.Any()) throw new ArgumentException("Minimum 1 document is required.");
             if (files.Count > 5) throw new ArgumentException("Maximum 5 documents allowed.");
@@ -113,14 +121,17 @@ namespace Application.Services
                 var ext = Path.GetExtension(file.FileName).ToLower();
                 if (!allowedExtensions.Contains(ext))
                     throw new ArgumentException($"File type {ext} not allowed.");
-                if (file.Length > 5 * 1024 * 1024)
+                if (file.Length > 5 * 1024 * 1024) // 5 MB limit
                     throw new ArgumentException("Max file size (5MB) exceeded.");
             }
 
             Policy policy;
             bool isNew = false;
+
             if (!string.IsNullOrEmpty(dto.QuoteId))
             {
+                // If a QuoteId is provided, upgrade the existing quote record to PendingReview
+                // rather than creating a duplicate; commission is always 10% of the premium
                 policy = await _policyRepository.GetByIdAsync(dto.QuoteId) ?? throw new KeyNotFoundException("Quote not found.");
                 policy.SelectedCoverageAmount = dto.SelectedCoverageAmount;
                 policy.PremiumAmount = dto.PremiumAmount;
@@ -128,12 +139,14 @@ namespace Application.Services
                 policy.StartDate = dto.StartDate;
                 policy.EndDate = dto.EndDate;
                 policy.Status = PolicyStatus.PendingReview;
-                policy.CommissionAmount = Math.Round(dto.PremiumAmount * 0.10m, 2);
+                policy.CommissionAmount = Math.Round(dto.PremiumAmount * 0.10m, 2); // 10% agent commission
                 policy.AutoRenew = dto.AutoRenew;
                 await _policyRepository.UpdateAsync(policy);
             }
             else
             {
+                // No existing quote — create a brand-new policy record with a PRQ- prefixed number
+                // The PRQ- prefix indicates a pending request; it becomes POL- once activated.
                 policy = new Policy
                 {
                     Id = await GenerateNextId(),
@@ -148,7 +161,7 @@ namespace Application.Services
                     StartDate = dto.StartDate,
                     EndDate = dto.EndDate,
                     Status = PolicyStatus.PendingReview,
-                    CommissionAmount = Math.Round(dto.PremiumAmount * 0.10m, 2),
+                    CommissionAmount = Math.Round(dto.PremiumAmount * 0.10m, 2), // 10% agent commission
                     CommissionStatus = CommissionStatus.Pending,
                     AutoRenew = dto.AutoRenew,
                     PaymentFrequency = dto.PaymentFrequency
@@ -254,6 +267,7 @@ namespace Application.Services
                 CustomerName = user?.FullName ?? "",
                 PlanId = policy.PlanId,
                 PlanName = plan?.PlanName ?? "",
+                PlanImageUrl = plan?.ImageUrl,
                 BusinessProfileId = policy.BusinessProfileId,
                 BusinessName = profile?.BusinessName ?? "",
                 Industry = profile?.Industry ?? "",
@@ -313,6 +327,8 @@ namespace Application.Services
                 var claims = await _claimRepository.FindAsync(c => c.PolicyId == p.Id && c.Status != ClaimStatus.Rejected);
                 var remainingCoverage = p.SelectedCoverageAmount - claims.Sum(c => c.ClaimAmount);
 
+                // Lazy expiry check: if an Active policy's end date has passed, mark it Expired on the fly.
+                // This avoids needing a background scheduler for periodic expiry sweeps.
                 var status = p.Status;
                 if (status == PolicyStatus.Active && p.EndDate < DateTime.UtcNow)
                 {
@@ -329,6 +345,7 @@ namespace Application.Services
                     CustomerName = user?.FullName ?? "",
                     PlanId = p.PlanId,
                     PlanName = plan?.PlanName ?? "",
+                    PlanImageUrl = plan?.ImageUrl,
                     BusinessProfileId = p.BusinessProfileId,
                     BusinessName = profile?.BusinessName ?? "",
                     Industry = profile?.Industry ?? "",
@@ -364,11 +381,17 @@ namespace Application.Services
             return result;
         }
 
+        // PREMIUM CALCULATION ENGINE
+        // Formula: FinalPremium = (Coverage × BaseRate × IndustryMultiplier
+        //                          × EmployeeMultiplier × RevenueMultiplier)
+        //                         + 10% agent commission
+        // Monthly = Annual / 12   |   Yearly = Annual × 0.95 (5% loyalty discount)
         public async Task<PremiumCalculationDto> CalculatePremiumAsync(PremiumCalculationRequestDto request)
         {
             var plan = await _planRepository.GetByIdAsync(request.PlanId);
             if (plan == null) throw new KeyNotFoundException("Plan not found.");
 
+            // Prefer an explicit business profile ID; fall back to looking up by customer ID
             BusinessProfile? profile;
             if (!string.IsNullOrEmpty(request.BusinessProfileId))
             {
@@ -384,29 +407,33 @@ namespace Application.Services
                 throw new InvalidOperationException("Please complete business profile before generating quote.");
             }
 
+            // Validate that the selected coverage falls within the plan's coverage band
             if (plan.MaxCoverageAmount > 0 && (request.SelectedCoverageAmount < plan.MinCoverageAmount || request.SelectedCoverageAmount > plan.MaxCoverageAmount))
             {
                 throw new ArgumentOutOfRangeException(nameof(request.SelectedCoverageAmount), "Selected coverage amount must be within the plan's allowed limits.");
             }
 
+            // Industry risk multiplier: manufacturing is highest risk (1.5×), others lower
             decimal industryMultiplier = profile.Industry.ToLower() switch
             {
                 "technology" => 1.1m,
-                "manufacturing" => 1.5m,
-                "healthcare" => 1.3m,
+                "manufacturing" => 1.5m, // Highest risk — physical equipment, injury liability
+                "healthcare" => 1.3m,    // High liability exposure
                 "retail" => 1.1m,
                 "finance" => 1.2m,
-                _ => 1.0m
+                _ => 1.0m                // Default for unlisted industries
             };
 
+            // Employee count multiplier: more employees = greater exposure
             decimal employeeMultiplier = profile.EmployeeCount switch
             {
-                <= 10 => 1.0m,
-                <= 50 => 1.2m,
-                <= 200 => 1.5m,
-                _ => 2.0m
+                <= 10 => 1.0m,  // Micro business
+                <= 50 => 1.2m,  // Small business
+                <= 200 => 1.5m, // Medium enterprise
+                _ => 2.0m       // Large corporation
             };
 
+            // Revenue multiplier: higher revenue = deeper pockets = higher coverage expectation
             decimal revenueMultiplier = profile.AnnualRevenue switch
             {
                 < 100000 => 1.0m,
@@ -416,24 +443,29 @@ namespace Application.Services
             };
 
             decimal basePremium = plan.BasePremium > 0 ? plan.BasePremium : 50m;
-            // ───── Insurance Calculation Engine ─────
-            // We use a base rate (e.g. 0.1% to 2% of coverage) instead of just multiplying base premium
-            decimal baseRate = (plan.BasePremium > 0 ? plan.BasePremium : 150m) / 1000m; // 0.15% if default 150
-            if (baseRate > 0.05m) baseRate = 0.02m; // Cap at 2% for base
 
+            //  Insurance Calculation Engine 
+            // BaseRate converts the plan's base premium into a percentage of coverage (e.g. 150 / 1000 = 0.15%).
+            // Capped at 2% to prevent unreasonably high premiums for plans with high BasePremium values.
+            decimal baseRate = (plan.BasePremium > 0 ? plan.BasePremium : 150m) / 1000m;
+            if (baseRate > 0.05m) baseRate = 0.02m; // 2% cap
+
+            // CoveragePremium = how much the raw coverage costs before risk multipliers
             decimal coveragePremium = request.SelectedCoverageAmount * baseRate;
 
+            // Apply all three risk multipliers together
             decimal multiplierSum = industryMultiplier * employeeMultiplier * revenueMultiplier;
             decimal totalAnnualPremium = coveragePremium * multiplierSum;
 
-            // Commission calculation (10% standard)
+            // Add a fixed 10% agent commission on top of the risk-adjusted premium
             decimal commissionPercentage = 0.10m;
             decimal annualCommission = totalAnnualPremium * commissionPercentage;
             decimal finalAnnualPremium = totalAnnualPremium + annualCommission;
 
-            // Frequencies
+            // Payment frequency options:
+            // Monthly = Annual / 12   |   Yearly = Annual × 0.95 (5% loyalty discount)
             decimal monthly = Math.Round(finalAnnualPremium / 12, 2);
-            decimal yearly = Math.Round(finalAnnualPremium * 0.95m, 2); // 5% discount for yearly
+            decimal yearly = Math.Round(finalAnnualPremium * 0.95m, 2);
 
             decimal finalPremium = (request.PaymentFrequency?.ToLower() == "yearly") ? yearly : monthly;
 
@@ -455,10 +487,12 @@ namespace Application.Services
             };
         }
 
+        // Selects the agent with the fewest currently assigned policies.
+        // This spreads new policy requests evenly across the agent pool.
         private async Task<string?> AutoAssignAgentByWorkloadAsync()
         {
             var agents = (await _userRepository.FindAsync(u => u.Role == UserRole.Agent)).ToList();
-            if (!agents.Any()) return null;
+            if (!agents.Any()) return null; // No agents in the system — policy will have no agent
 
             var workloads = new List<(string AgentId, int Count)>();
             foreach (var agent in agents)
@@ -610,18 +644,20 @@ namespace Application.Services
 
             if (isLapsed)
             {
-                // Case 2: Lapsed Renewal - Coverage gap exists (StartDate = Today)
+                // Case 2: Lapsed Renewal
+                // The policy has already expired, so renewal coverage starts from today (there is a coverage gap).
                 newStartDate = DateTime.UtcNow;
             }
-            else // Must be PolicyStatus.Active and not yet past EndDate
+            else // Policy is still Active and end date has not passed
             {
                 var daysUntilExpiry = (oldPolicy.EndDate - DateTime.UtcNow).TotalDays;
+                // Case 1: Early Renewal — only allowed within 30 days of expiry to prevent abuse
                 if (daysUntilExpiry > 30)
                 {
                     throw new InvalidOperationException(
                         $"Renewal is available 30 days before expiry. Your policy expires on {oldPolicy.EndDate:MMM d, yyyy} ({(int)daysUntilExpiry} days remaining).");
                 }
-                // Case 1: Early Renewal - No coverage gap (StartDate = EndDate + 1)
+                // Start the new policy the day after the old one ends — no coverage gap
                 newStartDate = oldPolicy.EndDate.AddDays(1);
             }
 
@@ -694,14 +730,22 @@ namespace Application.Services
             return await GetPolicyByIdAsync(newPolicy.Id) ?? throw new Exception("Error retrieving renewed policy.");
         }
 
+        // Cascade-deletes a policy and all its dependents in the correct order:
+        // 1. Payments attached to the policy
+        // 2. For each Claim: history logs → claim documents → the claim itself
+        // 3. Policy-level documents
+        // 4. The policy record itself
+        // EF Core does not auto-cascade here because we use a generic repository pattern.
         public async Task<bool> DeletePolicyAsync(string policyId)
         {
             var policy = await _policyRepository.GetByIdAsync(policyId);
             if (policy == null) return false;
 
+            // Step 1: Delete all payment records for this policy
             var payments = await _paymentRepository.FindAsync(p => p.PolicyId == policyId);
             foreach (var p in payments) await _paymentRepository.DeleteAsync(p);
 
+            // Step 2: For each claim, delete its audit logs and documents before deleting the claim
             var claims = await _claimRepository.FindAsync(c => c.PolicyId == policyId);
             foreach (var c in claims)
             {
@@ -714,9 +758,11 @@ namespace Application.Services
                 await _claimRepository.DeleteAsync(c);
             }
 
+            // Step 3: Delete documents attached directly to the policy (not to claims)
             var policyDocs = await _documentRepository.FindAsync(d => d.PolicyId == policyId);
             foreach (var d in policyDocs) await _documentRepository.DeleteAsync(d);
 
+            // Step 4: Finally delete the top-level policy record
             await _policyRepository.DeleteAsync(policy);
             return true;
         }

@@ -1,8 +1,9 @@
-// Provides core functionality and structures for the application.
+// DTOs for creating, reading, and updating a customer's business profile (company name, type, address, employee count, etc.).
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs
 {
+    // Outbound DTO representing a fully hydrated business profile for display on the customer dashboard
     public class BusinessProfileDto
     {
         public string Id { get; set; } = string.Empty;
@@ -16,6 +17,7 @@ namespace Application.DTOs
         public DateTime CreatedAt { get; set; }
     }
 
+    // Inbound DTO for creating a new business profile; all fields are required before a policy can be issued
     public class CreateBusinessProfileDto
     {
         [Required]
@@ -39,6 +41,7 @@ namespace Application.DTOs
         public string City { get; set; } = string.Empty;
     }
 
+    // Inbound DTO for editing an existing business profile; includes the profile ID for lookup
     public class UpdateBusinessProfileDto
     {
         [Required]

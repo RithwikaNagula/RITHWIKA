@@ -1,3 +1,6 @@
+// Test Layer: Infrastructure Data Access
+// Purpose: Ensures Entity Framework Core database contexts and repository abstract queries compile and execute correctly against in-memory DBs.
+// Design: Uses XUnit and Moq to isolate dependencies and guarantee idempotent execution.
 using Xunit;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +23,7 @@ namespace Infrastructure.Tests.Repositories
                 .Options;
         }
 
+        // Verifies that the generic repository implementation can successfully insert and fetch an InsuranceType
         [Fact]
         public async Task InsuranceTypeRepository_ShouldCreateAndRetrieve()
         {
@@ -36,6 +40,7 @@ namespace Infrastructure.Tests.Repositories
             retrieved.TypeName.Should().Be("Test Type");
         }
 
+        // Ensures that a new Claim entity is properly tracked and persisted by the repository context
         [Fact]
         public async Task ClaimRepository_ShouldAddRecordCorrectly()
         {
@@ -52,6 +57,7 @@ namespace Infrastructure.Tests.Repositories
             retrieved.ClaimAmount.Should().Be(5000);
         }
 
+        // Confirms that the generic UpdateAsync method successfully applies modifications to an existing Plan
         [Fact]
         public async Task PlanRepository_ShouldUpdateSuccessfully()
         {
@@ -69,6 +75,7 @@ namespace Infrastructure.Tests.Repositories
             updated!.PlanName.Should().Be("New Plan");
         }
 
+        // Verifies that mutating a Notification entity's property and calling UpdateAsync persists the change
         [Fact]
         public async Task NotificationRepository_ShouldMarkAsRead()
         {

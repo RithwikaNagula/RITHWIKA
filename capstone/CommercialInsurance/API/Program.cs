@@ -1,4 +1,4 @@
-// Provides core functionality and structures for the application.
+﻿// Application entry point. Configures services (DI, JWT, EF Core, SignalR, CORS, Swagger), seeds the default admin user and insurance catalog, then builds and starts the ASP.NET pipeline.
 using API.Extensions;
 using API.ExceptionHandlers;
 using Domain.Entities;
@@ -8,31 +8,23 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add controllers
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 
-// Add Exception Handling
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-// Add DbContext
 builder.Services.AddDbContext<InsuranceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add custom services (repositories, services, helpers)
 builder.Services.AddApplicationServices();
 
-// Add JWT Authentication
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
-// Add Authorization
 builder.Services.AddAuthorization();
 
-// Add Swagger with JWT support
 builder.Services.AddSwaggerWithJwt();
 
-// Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -151,7 +143,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -164,7 +155,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseExceptionHandler();
 
-// app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

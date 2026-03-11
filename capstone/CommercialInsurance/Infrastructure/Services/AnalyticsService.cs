@@ -1,3 +1,4 @@
+// Implements analytics queries directly against the DbContext: revenue trends, claim volumes, policy status breakdowns.
 using Application.DTOs;
 using Application.Interfaces.Services;
 using Domain.Enums;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
+    // Queries the DbContext directly (bypassing repositories) for complex multi-table aggregations
+    // that don't fit the generic repository pattern
     public class AnalyticsService : IAnalyticsService
     {
         private readonly InsuranceDbContext _context;
@@ -19,8 +22,10 @@ namespace Infrastructure.Services
             _context = context;
         }
 
+        // Groups all agent-assigned policies by AgentId, sums commissions, and returns ranked performance
         public async Task<List<AgentPerformanceDto>> GetAgentPerformanceAsync()
         {
+            // Step 1: Aggregate total commission per agent using a GROUP BY on PolicyId
             var agentPerformance = await _context.Policies
                 .Where(p => p.AgentId != null)
                 .GroupBy(p => p.AgentId)
@@ -31,8 +36,10 @@ namespace Infrastructure.Services
                 })
                 .ToListAsync();
 
+            // Step 2: Build a lookup dictionary of agent names to avoid per-record queries
             var users = await _context.Users.Where(u => u.Role == UserRole.Agent).ToDictionaryAsync(u => u.Id, u => u.FullName);
 
+            // Step 3: Map to DTOs and sort by highest commission first
             var dtos = new List<AgentPerformanceDto>();
             foreach (var item in agentPerformance)
             {
@@ -49,10 +56,12 @@ namespace Infrastructure.Services
             return dtos.OrderByDescending(d => d.TotalCommission).ToList();
         }
 
+        // Calculates claim approval rates, total counts, and per-officer settlement rankings
         public async Task<ClaimsAnalyticsDto> GetClaimsPerformanceAsync()
         {
             var allClaims = await _context.Claims.ToListAsync();
             var totalClaims = allClaims.Count;
+            // Count Approved + Settled as "approved" for the approval rate calculation
             var approvedStatuses = new[] { ClaimStatus.Approved, ClaimStatus.Settled };
             var approvedClaims = allClaims.Count(c => approvedStatuses.Contains(c.Status));
             var approvalRate = totalClaims > 0 ? Math.Round((decimal)approvedClaims / totalClaims * 100, 2) : 0;
@@ -85,10 +94,12 @@ namespace Infrastructure.Services
             };
         }
 
+        // Builds revenue analytics with time-series trend data for either monthly or yearly periods
         public async Task<RevenueAnalyticsDto> GetRevenueAnalyticsAsync(string period)
         {
             var isYearly = period?.ToLower() == "yearly";
 
+            // Fetch all completed payments and settled claims for revenue computation
             var allPayments = await _context.Payments
                 .Where(p => p.Status == PaymentStatus.Completed)
                 .ToListAsync();
@@ -97,6 +108,7 @@ namespace Infrastructure.Services
                 .Where(c => c.Status == ClaimStatus.Settled)
                 .ToListAsync();
 
+            // Net revenue = total premiums collected minus total claim settlements paid out
             var totalPremiumCollected = allPayments.Sum(p => p.Amount);
             var totalSettlementsPaid = allClaims.Sum(c => c.ClaimAmount);
             var netRevenue = totalPremiumCollected - totalSettlementsPaid;
@@ -147,6 +159,7 @@ namespace Infrastructure.Services
             var previousPeriodSettlement = allClaims.Where(c => c.ResolvedAt.HasValue && c.ResolvedAt.Value >= previousPeriodStart && c.ResolvedAt.Value <= previousPeriodEnd).Sum(c => c.ClaimAmount);
             var prevRev = previousPeriodPremium - previousPeriodSettlement;
 
+            // Calculate period-over-period growth percentage; handles zero-previous-period edge case
             var growth = prevRev == 0 ? (curRev > 0 ? 100 : 0) : Math.Round(((curRev - prevRev) / Math.Abs(prevRev)) * 100, 2);
 
             var totalPolicies = await _context.Policies.CountAsync();

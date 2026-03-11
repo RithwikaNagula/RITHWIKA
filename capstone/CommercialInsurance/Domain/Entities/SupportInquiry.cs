@@ -1,3 +1,4 @@
+﻿// Contact form submission from a customer or visitor, stored for admin follow-up.
 using System;
 
 namespace Domain.Entities

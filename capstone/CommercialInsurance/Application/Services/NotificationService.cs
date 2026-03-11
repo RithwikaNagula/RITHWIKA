@@ -1,90 +1,95 @@
+// Manages system alerts, persists them to the database, and uses SignalR to broadcast real-time updates to connected clients.
 using Application.DTOs;
 using Application.Interfaces.Repositories;
-using Application.Hubs;
-using Domain.Entities;
-using Domain.Enums;
-using Microsoft.AspNetCore.SignalR;
 using Application.Interfaces.Services;
+using Domain.Entities;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Services
 {
     public class NotificationService : INotificationService
     {
-        private readonly IGenericRepository<Notification> _repository;
-        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly INotificationRepository _notificationRepository;
+
+        // Injects standard DB repo alongside the SignalR Hub Context. 
+        // HubContext enables server-to-client push commands outside of a direct HTTP request cycle.
+        private readonly IHubContext<Application.Hubs.NotificationHub> _hubContext;
 
         public NotificationService(
-            IGenericRepository<Notification> repository,
-            IHubContext<NotificationHub> hubContext)
+            INotificationRepository notificationRepository,
+            IHubContext<Application.Hubs.NotificationHub> hubContext)
         {
-            _repository = repository;
+            _notificationRepository = notificationRepository;
             _hubContext = hubContext;
         }
 
-        public async Task CreateNotificationAsync(string userId, string title, string message, string type, string? relatedEntityId = null)
-        {
-            if (!Enum.TryParse<NotificationType>(type, true, out var notificationType))
-            {
-                notificationType = NotificationType.System;
-            }
-
-            var notification = new Notification
-            {
-                UserId = userId,
-                Title = title,
-                Message = message,
-                Type = notificationType,
-                RelatedEntityId = relatedEntityId
-            };
-
-            await _repository.AddAsync(notification);
-
-            var dto = new NotificationDto
-            {
-                Id = notification.Id,
-                Title = notification.Title,
-                Message = notification.Message,
-                Type = notification.Type.ToString(),
-                IsRead = notification.IsRead,
-                CreatedAt = notification.CreatedAt,
-                RelatedEntityId = notification.RelatedEntityId
-            };
-
-            await _hubContext.Clients.User(userId).SendAsync("ReceiveNotification", dto);
-        }
-
+        // Retrieves all unread alerts for a given user, sorted newest-first.
+        // Used primarily to populate the drop-down bell menu on page load.
         public async Task<IEnumerable<NotificationDto>> GetUserNotificationsAsync(string userId)
         {
-            var notifications = await _repository.FindAsync(n => n.UserId == userId);
-            return notifications.OrderByDescending(n => n.CreatedAt).Select(n => new NotificationDto
+            var notifications = await _notificationRepository.FindAsync(n => n.UserId == userId && !n.IsRead);
+            return notifications.Select(n => new NotificationDto
             {
                 Id = n.Id,
                 Title = n.Title,
                 Message = n.Message,
                 Type = n.Type.ToString(),
-                IsRead = n.IsRead,
                 CreatedAt = n.CreatedAt,
-                RelatedEntityId = n.RelatedEntityId
-            });
+                IsRead = n.IsRead
+            }).OrderByDescending(n => n.CreatedAt);
         }
 
-        public async Task MarkAsReadAsync(string notificationId)
+        // Creates a DB record AND attempts immediate WebSocket delivery.
+        public async Task CreateNotificationAsync(string userId, string title, string message, string type, string? referenceId = null)
         {
-            var notification = await _repository.GetByIdAsync(notificationId);
-            if (notification != null && !notification.IsRead)
+            var notification = new Notification
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserId = userId,
+                Title = title,
+                Message = message,
+                Type = Enum.TryParse<Domain.Enums.NotificationType>(type, true, out var parsedType) ? parsedType : Domain.Enums.NotificationType.System,
+                CreatedAt = DateTime.UtcNow,
+                IsRead = false
+            };
+
+            await _notificationRepository.AddAsync(notification);
+
+            // Using SignalR groups: Each authenticated user joins a group named after their ID.
+            // Fire-and-forget message "ReceiveNotification" pushes the alert dynamically 
+            // without requiring a page refresh on the client side.
+            await _hubContext.Clients.Group(userId).SendAsync("ReceiveNotification", new NotificationDto
+            {
+                Id = notification.Id,
+                Title = title,
+                Message = message,
+                Type = type,
+                CreatedAt = notification.CreatedAt,
+                IsRead = false
+            });
+
+
+        }
+
+        // Toggles a single notification's state; removes it from the unread queue.
+        public async Task MarkAsReadAsync(string id)
+        {
+            var notification = await _notificationRepository.GetByIdAsync(id);
+            if (notification != null)
             {
                 notification.IsRead = true;
-                await _repository.UpdateAsync(notification);
+                await _notificationRepository.UpdateAsync(notification);
             }
         }
 
+        // Clears the unread queue entirely; invoked when a user clicks "Mark all as read" in the UI.
         public async Task MarkAllAsReadAsync(string userId)
         {
-            var notifications = await _repository.FindAsync(n => n.UserId == userId && !n.IsRead);
-            foreach (var notification in notifications)
+            var unread = await _notificationRepository.FindAsync(n => n.UserId == userId && !n.IsRead);
+            foreach (var r in unread)
             {
-                notification.IsRead = true;
-                await _repository.UpdateAsync(notification);
+                r.IsRead = true;
+                await _notificationRepository.UpdateAsync(r);
             }
         }
     }

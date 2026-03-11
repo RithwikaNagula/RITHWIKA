@@ -1,3 +1,6 @@
+// Test Layer: Application Services
+// Purpose: Validates core business logic, algorithm correctness, and interactions with mocked domain repositories.
+// Design: Uses XUnit and Moq to isolate dependencies and guarantee idempotent execution.
 using Xunit;
 using Moq;
 using FluentAssertions;
@@ -14,6 +17,7 @@ namespace Application.Tests.Renewal
 {
     public class RenewalTests
     {
+        // Asserts that renewing an expired policy successfully generates a new linked policy record and persists it via the repository
         [Fact]
         public async Task RenewPolicy_ShouldCreateNewPolicyAndLinkToPrevious()
         {
@@ -60,6 +64,7 @@ namespace Application.Tests.Renewal
             policyRepoMock.Verify(r => r.AddAsync(It.Is<Policy>(p => p.PreviousPolicyId == "policy-abc")), Times.Once);
         }
 
+        // Validates that attempting to renew a policy too far from its expiry date safely catches the violation and throws an exception
         [Fact]
         public async Task RenewPolicy_ShouldThrowException_WhenActivePolicyExists()
         {

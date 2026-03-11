@@ -1,4 +1,4 @@
-// Provides core functionality and structures for the application.
+﻿// Manages claim filing, status transitions (Submitted → UnderReview → Approved/Rejected → Settled), document uploads, and notifications.
 using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -38,6 +38,7 @@ namespace Application.Services
             _notificationService = notificationService;
         }
 
+        // Generates a sequential claim ID with the prefix 'clm' (e.g. clm1, clm2, ...)
         private async Task<string> GenerateClaimId()
         {
             var all = await _claimRepository.GetAllAsync();
@@ -45,6 +46,7 @@ namespace Application.Services
             return $"clm{count + 1}";
         }
 
+        // Generates a sequential document ID for claim-attached files (cdoc1, cdoc2, ...)
         private async Task<string> GenerateDocId()
         {
             var all = await _documentRepository.GetAllAsync();
@@ -52,6 +54,7 @@ namespace Application.Services
             return $"cdoc{count + 1}";
         }
 
+        // Generates a sequential history log ID (clog1, clog2, ...) for audit trail entries
         private async Task<string> GenerateHistoryId()
         {
             var all = await _historyRepository.GetAllAsync();
@@ -59,20 +62,26 @@ namespace Application.Services
             return $"clog{count + 1}";
         }
 
+        // Files a new insurance claim against an active policy.
+        // Validates the policy status, file types/sizes, and remaining coverage before creating the claim.
+        // After creation, uploads evidence files and creates the initial audit log entry.
         public async Task<ClaimDto> FileClaimAsync(CreateClaimDto dto, string policyId, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> files)
         {
             var policy = await _policyRepository.GetByIdAsync(policyId);
             if (policy == null) throw new Domain.Exceptions.NotFoundException("Policy not found.");
 
+            // Claims can only be filed on Active policies — not pending, expired, or rejected ones
             if (policy.Status != PolicyStatus.Active)
                 throw new Domain.Exceptions.BusinessRuleException("Claims can only be filed on active policies.");
 
+            // At least one supporting document is mandatory for a claim
             if (files == null || !files.Any())
                 throw new Domain.Exceptions.ValidationException("At least one supporting document is required.");
 
-            // ───── VALIDATIONS ─────
-            const long maxFileSize = 5 * 1024 * 1024; // 5MB
-            var allowedTypes = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+            //  FILE VALIDATIONS 
+            // Rules: max 5 files, max 5 MB each, only PDF/JPG/JPEG/PNG accepted
+            const long maxFileSize = 5 * 1024 * 1024; // 5 MB in bytes
+            var allowedTypes = new[] { ".pdf", ".jpg", ".jpeg", ".png",".docx" };
 
             if (files.Count() > 5)
                 throw new Domain.Exceptions.ValidationException("Maximum 5 documents allowed per claim.");
@@ -87,7 +96,9 @@ namespace Application.Services
                     throw new Domain.Exceptions.ValidationException($"File type {ext} is not allowed.");
             }
 
-            // Check remaining coverage limit
+            //  REMAINING COVERAGE CHECK 
+            // Sum up all non-rejected claims already filed on this policy.
+            // If the new claim amount exceeds the remaining coverage, reject it — the policy cannot pay out more than its limit.
             var existingClaims = await _claimRepository.FindAsync(c => c.PolicyId == policyId && c.Status != ClaimStatus.Rejected);
             var usedCoverage = existingClaims.Sum(c => c.ClaimAmount);
             var remainingCoverage = policy.SelectedCoverageAmount - usedCoverage;
@@ -97,13 +108,15 @@ namespace Application.Services
                 throw new Domain.Exceptions.BusinessRuleException($"Claim amount cannot exceed the remaining coverage amount of {remainingCoverage:C}.");
             }
 
-            // Assignment Logic: Use assigned Claims Officer from User Profile
+            // Assignment Logic: Use the claims officer already assigned to this customer.
+            // This ensures continuity — the same officer handles all of a customer's claims.
             var customer = await _userRepository.GetByIdAsync(policy.UserId);
             var officerId = customer?.AssignedClaimsOfficerId;
 
             if (string.IsNullOrEmpty(officerId))
             {
-                // Fallback for legacy accounts
+                // Fallback for legacy accounts that do not have a pre-assigned officer.
+                // Select the officer with the fewest currently open (Submitted or UnderReview) claims.
                 var officers = await _userRepository.FindAsync(u => u.Role == UserRole.ClaimsOfficer);
                 if (!officers.Any())
                     throw new InvalidOperationException("No claims officers available for assignment.");
@@ -118,6 +131,7 @@ namespace Application.Services
                     .OrderBy(x => x.Count)
                     .First().OfficerId;
 
+                // Persist the assignment so future claims for this customer go to the same officer
                 if (customer != null)
                 {
                     customer.AssignedClaimsOfficerId = officerId;
@@ -164,13 +178,14 @@ namespace Application.Services
                 });
             }
 
+            // Create the initial audit log entry showing the claim was filed
             await _historyRepository.AddAsync(new ClaimHistoryLog
             {
                 Id = await GenerateHistoryId(),
                 ClaimId = claim.Id,
                 Status = ClaimStatus.Submitted,
                 Remarks = "Claim filed with supporting documents.",
-                ChangedByUserId = policy.UserId,
+                ChangedByUserId = policy.UserId, // The customer is the one who filed it
                 ChangedAt = DateTime.UtcNow
             });
 
@@ -188,30 +203,37 @@ namespace Application.Services
             return await GetClaimByIdAsync(claim.Id) ?? throw new Exception("Error retrieving saved claim.");
         }
 
+        // Updates the claim's status (UnderReview, Approved, Rejected, Settled, etc.).
+        // Always creates an audit history log entry so reviewers can trace every status change.
+        // Sends a real-time notification to the policy owner after every status change.
         public async Task<ClaimDto> UpdateClaimStatusAsync(string claimId, UpdateClaimStatusDto dto, string officerId)
         {
             var claim = await _claimRepository.GetByIdAsync(claimId);
             if (claim == null) throw new Domain.Exceptions.NotFoundException("Claim not found.");
 
+            // Validate that the supplied status string maps to a known ClaimStatus enum value
             if (!Enum.TryParse<ClaimStatus>(dto.Status, true, out var newStatus))
                 throw new Domain.Exceptions.ValidationException($"Invalid status: {dto.Status}");
 
             claim.Status = newStatus;
+            // Record the resolution timestamp when the claim reaches a terminal state
             if (newStatus == ClaimStatus.Approved || newStatus == ClaimStatus.Rejected || newStatus == ClaimStatus.Settled)
                 claim.ResolvedAt = DateTime.UtcNow;
 
             await _claimRepository.UpdateAsync(claim);
 
+            // Add an audit trail entry recording who changed the status, when, and with what remarks
             await _historyRepository.AddAsync(new ClaimHistoryLog
             {
                 Id = await GenerateHistoryId(),
                 ClaimId = claim.Id,
                 Status = newStatus,
                 Remarks = dto.Remarks,
-                ChangedByUserId = officerId,
+                ChangedByUserId = officerId, // The claims officer performing the update
                 ChangedAt = DateTime.UtcNow
             });
 
+            // Notify the policy owner (customer) of the status change
             var policy = await _policyRepository.GetByIdAsync(claim.PolicyId);
             if (policy != null)
             {

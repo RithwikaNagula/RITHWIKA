@@ -1,7 +1,9 @@
+// DTOs for role-specific dashboard summaries: admin metrics, agent performance stats, and claims officer worklist counts.
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs
 {
+    // Outbound KPIs for the admin landing dashboard: total users, policies, claims, and revenue
     public class AdminDashboardDto
     {
         public int TotalUsers { get; set; }
@@ -14,6 +16,7 @@ namespace Application.DTOs
         public int PendingClaims { get; set; }
     }
 
+    // Chart-ready aggregates for admin analytics: policies grouped by type, claims by status, revenue by month
     public class AdminAnalyticsDto
     {
         public Dictionary<string, int> PoliciesByType { get; set; } = new();
@@ -22,6 +25,7 @@ namespace Application.DTOs
         public Dictionary<string, int> PoliciesByAgent { get; set; } = new();
     }
 
+    // Outbound KPIs for the agent landing dashboard: assigned policies, commission, and customer counts
     public class AgentDashboardDto
     {
         public int AssignedPolicies { get; set; }

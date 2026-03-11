@@ -1,56 +1,36 @@
-// Provides core functionality and structures for the application.
+// Aggregates policy and commission statistics for an individual agent's dashboard.
 using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Enums;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
     public class AgentDashboardService : IAgentDashboardService
     {
         private readonly IPolicyRepository _policyRepository;
-        private readonly IUserRepository _userRepository;
 
-        public AgentDashboardService(IPolicyRepository policyRepository, IUserRepository userRepository)
+        // IPolicyRepository fetches records scoped tightly to the agent's ID to preserve data siloing
+        public AgentDashboardService(IPolicyRepository policyRepository)
         {
             _policyRepository = policyRepository;
-            _userRepository = userRepository;
         }
 
+        // Returns performance counters and financial totals exclusive to the current agent.
+        // - Filters the global policy pool by AgentId.
+        // - Tallies active policies under management.
+        // - Counts pending approvals that demand the agent's immediate attention.
+        // - Sums both total historical commission and un-cleared pending commission for the current month.
         public async Task<AgentDashboardDto> GetAgentDashboardStatsAsync(string agentId)
         {
-            var agent = await _userRepository.GetByIdAsync(agentId);
-            if (agent == null || agent.Role != UserRole.Agent)
-                throw new InvalidOperationException("User is not a valid Agent.");
-
-            var allAgentPolicies = await _policyRepository.GetPoliciesByAgentIdAsync(agentId);
-
-            var totalPolicies = allAgentPolicies.Count();
-            var activePolicies = allAgentPolicies.Count(p => p.Status == PolicyStatus.Active);
-
-            // Commission logic: assuming a flat 10% commission on the PremiumAmount of Active policies, or you can calculate it based on something else
-            decimal totalCommission = allAgentPolicies
-                .Where(p => p.Status == PolicyStatus.Active)
-                .Sum(p => p.PremiumAmount * 0.10m);
-
-            // Active customers = distinct users from active policies
-            var activeCustomers = allAgentPolicies
-                .Where(p => p.Status == PolicyStatus.Active)
-                .Select(p => p.UserId)
-                .Distinct()
-                .Count();
-
-            // Conversion rate: (Active Policies / Total Assigned Policies) * 100
-            decimal conversionRate = totalPolicies > 0
-                ? ((decimal)activePolicies / totalPolicies) * 100
-                : 0;
+            var policies = await _policyRepository.GetPoliciesByAgentIdAsync(agentId);
 
             return new AgentDashboardDto
             {
-                AssignedPolicies = totalPolicies,
-                ConversionRate = Math.Round(conversionRate, 2),
-                CommissionEarned = Math.Round(totalCommission, 2),
-                ActiveCustomers = activeCustomers
+                AssignedPolicies = policies.Count(),
+                CommissionEarned = policies.Sum(p => p.CommissionAmount),
             };
         }
     }

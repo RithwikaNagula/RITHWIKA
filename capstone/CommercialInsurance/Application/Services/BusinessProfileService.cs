@@ -1,4 +1,4 @@
-// Provides core functionality and structures for the application.
+// Handles creation and update of business profiles; each customer may have one profile required for policy purchase.
 using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -10,11 +10,14 @@ namespace Application.Services
     {
         private readonly IBusinessProfileRepository _profileRepository;
 
+        // Abstracted repository prevents leaking data context complexities through the domain
         public BusinessProfileService(IBusinessProfileRepository profileRepository)
         {
             _profileRepository = profileRepository;
         }
 
+        // Fetches the first business profile found for a user ID. 
+        // Used extensively to verify if a user has fulfilled the KYC prerequisite prior to getting quotes.
         public async Task<BusinessProfileDto?> GetByUserIdAsync(string userId)
         {
             var profile = await _profileRepository.GetByUserIdAsync(userId);
@@ -23,6 +26,7 @@ namespace Application.Services
             return MapToDto(profile);
         }
 
+        // Fetches a profile distinctly by the profile's own ID, useful if the system expands to multi-profile.
         public async Task<BusinessProfileDto?> GetByIdAsync(string id)
         {
             var profile = await _profileRepository.GetByIdAsync(id);
@@ -31,12 +35,14 @@ namespace Application.Services
             return MapToDto(profile);
         }
 
+        // Retrieves all profiles directly owned by the passed user context.
         public async Task<IEnumerable<BusinessProfileDto>> GetProfilesByUserIdAsync(string userId)
         {
             var profiles = await _profileRepository.GetProfilesByUserIdAsync(userId);
             return profiles.Select(MapToDto);
         }
 
+        // Simple sequencer ensuring primary key uniqueness (bpro1, bpro2).
         private async Task<string> GenerateNextId()
         {
             var all = await _profileRepository.GetAllAsync();
@@ -44,6 +50,9 @@ namespace Application.Services
             return $"bpro{count + 1}";
         }
 
+        // Implements standard IDempotent Upsert logic: tests if the combination of UserID and BusinessName
+        // exists. If not found, provisions a complete new profile. If found, upgrades the pre-existing row 
+        // cleanly without duplicating.
         public async Task<BusinessProfileDto> UpsertProfileAsync(string userId, CreateBusinessProfileDto dto)
         {
             // Support multiple profiles: check if a profile with SAME BusinessName exists for this user
@@ -52,6 +61,7 @@ namespace Application.Services
 
             if (profile == null)
             {
+                // Insertion branch triggering when no exact string match is found
                 profile = new BusinessProfile
                 {
                     Id = await GenerateNextId(),
@@ -61,12 +71,13 @@ namespace Application.Services
                     AnnualRevenue = dto.AnnualRevenue,
                     EmployeeCount = dto.EmployeeCount,
                     City = dto.City,
-                    IsProfileCompleted = true
+                    IsProfileCompleted = true // Auto-validates completing the flow here
                 };
                 await _profileRepository.AddAsync(profile);
             }
             else
             {
+                // Update branch to persist late-bound information modifications securely
                 profile.Industry = dto.Industry;
                 profile.AnnualRevenue = dto.AnnualRevenue;
                 profile.EmployeeCount = dto.EmployeeCount;
@@ -79,12 +90,14 @@ namespace Application.Services
             return MapToDto(profile);
         }
 
+        // Explicit edit flow for a given ID ensuring that the targeted user truly owns the profile being modified.
         public async Task<BusinessProfileDto> UpdateProfileAsync(string userId, UpdateBusinessProfileDto dto)
         {
             var profile = await _profileRepository.GetByIdAsync(dto.Id); // Update by ID now
             if (profile == null || profile.UserId != userId)
                 throw new KeyNotFoundException("Business profile not found.");
 
+            // Directly overwrite the domain model attributes safely relying on EF entity tracking
             profile.BusinessName = dto.BusinessName;
             profile.Industry = dto.Industry;
             profile.AnnualRevenue = dto.AnnualRevenue;
@@ -97,6 +110,7 @@ namespace Application.Services
             return MapToDto(profile);
         }
 
+        // Map function isolating the Data Transfer payload representing KYC data
         private static BusinessProfileDto MapToDto(BusinessProfile profile)
         {
             return new BusinessProfileDto

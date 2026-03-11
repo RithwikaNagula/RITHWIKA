@@ -1,3 +1,4 @@
+﻿// In-app notification record sent to a user about policy or claim events.
 using Domain.Enums;
 
 namespace Domain.Entities
